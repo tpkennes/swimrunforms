@@ -251,11 +251,11 @@
 <script>
   // ── CONFIG ──────────────────────────────────────────────────────────────
   const ADMIN_PASSWORD = 'swimrun2025'; // ← Change ce mot de passe !
-  const GITHUB_TOKEN   = 'TON_TOKEN_GITHUB_ICI';
-  const GITHUB_OWNER   = 'ton-username';
-  const GITHUB_REPO    = 'swimrun-binome';
-  const DATA_FILE      = 'data.json';
-  const COURSES_FILE   = 'courses.json';
+const WORKER_URL = 'https://swimrun.tpkennes.workers.dev';
+const GITHUB_OWNER = 'tpkennes';
+const GITHUB_REPO  = 'swimrunforms';
+const DATA_FILE    = 'data.json';
+const COURSES_FILE = 'courses.json';
 
   let inscrits = [];
   let courses  = [];
@@ -292,38 +292,34 @@
   let dataShaSaved = null;
   let coursesShaSaved = null;
 
-  async function ghGet(file) {
-    const r = await fetch(
-      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${file}`,
-      { headers: { Authorization: `token ${GITHUB_TOKEN}` } }
-    );
-    if (!r.ok) {
-      const err = await r.json().catch(() => ({}));
-      throw new Error(`GitHub ${r.status}: ${err.message || 'Lecture impossible'}`);
-    }
-    const json = await r.json();
-    return { data: JSON.parse(atob(json.content)), sha: json.sha };
+async function ghGet(file) {
+  const githubUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${file}`;
+  const r = await fetch(`${WORKER_URL}?url=${encodeURIComponent(githubUrl)}`);
+  if (!r.ok) {
+    const err = await r.json().catch(() => ({}));
+    throw new Error(`GitHub ${r.status}: ${err.message || 'Lecture impossible'}`);
   }
+  const json = await r.json();
+  return { data: JSON.parse(atob(json.content)), sha: json.sha };
+}
 
   // Relit toujours le SHA frais avant d'ecrire pour eviter les conflits
-  async function ghPut(file, data, msg) {
-    const { sha } = await ghGet(file);
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
-    const r = await fetch(
-      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${file}`,
-      {
-        method: 'PUT',
-        headers: { Authorization: `token ${GITHUB_TOKEN}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: msg, content, sha })
-      }
-    );
-    if (!r.ok) {
-      const err = await r.json().catch(() => ({}));
-      throw new Error(`GitHub ${r.status}: ${err.message || 'Ecriture impossible'}`);
-    }
-    const json = await r.json();
-    return json.content.sha;
+async function ghPut(file, data, msg) {
+  const { sha } = await ghGet(file);
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+  const githubUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${file}`;
+  const r = await fetch(`${WORKER_URL}?url=${encodeURIComponent(githubUrl)}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: msg, content, sha })
+  });
+  if (!r.ok) {
+    const err = await r.json().catch(() => ({}));
+    throw new Error(`GitHub ${r.status}: ${err.message || 'Écriture impossible'}`);
   }
+  const json = await r.json();
+  return json.content.sha;
+}
 
   // ── CHARGEMENT ──────────────────────────────────────────────────────────
   async function load() {
