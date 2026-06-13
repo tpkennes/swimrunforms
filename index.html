@@ -259,111 +259,100 @@
       border-radius: 12px;
     }
 
-    /* ── RACE GROUP ── */
-    .race-group { margin-bottom: 28px; }
-    .race-label {
+    /* ── TABLEAU INSCRITS ── */
+    .table-wrap { overflow-x: auto; border-radius: var(--radius); box-shadow: var(--shadow); }
+    .inscrits-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      background: var(--white);
+    }
+    .inscrits-table thead tr {
+      background: var(--ocean);
+    }
+    .inscrits-table th {
+      font-family: 'Syne', sans-serif;
       font-size: 12px;
       font-weight: 700;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: var(--cyan);
-      background: var(--ocean);
-      display: inline-block;
-      padding: 5px 14px;
-      border-radius: 20px;
-      margin-bottom: 12px;
+      color: var(--foam);
+      padding: 13px 16px;
+      text-align: left;
+      white-space: nowrap;
     }
-    .race-count {
-      font-size: 12px;
-      color: var(--muted);
-      margin-left: 8px;
-      font-weight: 400;
-      letter-spacing: 0;
-      text-transform: none;
+    .inscrits-table td {
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      color: var(--text);
     }
+    .inscrits-table tbody tr:last-child td { border-bottom: none; }
+    .inscrits-table tbody tr:hover td { background: #f4fafd; }
 
-    /* ── INSCRIT CARD ── */
-    .entry-card {
-      background: var(--bg);
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      padding: 16px;
-      margin-bottom: 10px;
-      transition: border-color 0.2s;
-    }
-    .entry-card:hover { border-color: var(--cyan); }
-
-    .entry-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .entry-name {
+    .td-name {
       font-family: 'Syne', sans-serif;
-      font-size: 17px;
+      font-size: 15px;
       font-weight: 700;
       color: var(--ocean);
+      white-space: nowrap;
     }
-    .entry-date {
-      font-size: 12px;
+    .td-course {
+      font-size: 13px;
       color: var(--muted);
+      min-width: 140px;
     }
-    .entry-comment {
-      margin-top: 8px;
-      font-size: 14px;
-      color: #3D5A6A;
-      line-height: 1.6;
+    .td-comment {
       font-style: italic;
+      color: #3D5A6A;
+      font-size: 13px;
+      line-height: 1.5;
+      max-width: 220px;
     }
+    .td-date { font-size: 12px; color: var(--muted); white-space: nowrap; }
 
-    /* contact reveal */
-    .contact-area { margin-top: 12px; }
+    /* contact reveal dans le tableau */
     .btn-reveal {
       font-family: 'Inter', sans-serif;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
-      padding: 8px 16px;
-      border-radius: 8px;
+      padding: 6px 12px;
+      border-radius: 6px;
       border: 1.5px solid var(--cyan);
       background: transparent;
       color: var(--cyan);
       cursor: pointer;
       transition: all 0.18s;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      white-space: nowrap;
     }
     .btn-reveal:hover { background: var(--cyan); color: var(--white); }
 
-    .reveal-form {
+    /* panneau reveal — s'affiche sous la ligne du tableau */
+    .reveal-panel {
       display: none;
-      margin-top: 10px;
       background: var(--white);
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      padding: 14px;
+      border-top: 1px solid var(--border);
     }
-    .reveal-form.open { display: block; }
-    .reveal-form p { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
-    .reveal-input-row {
-      display: flex;
-      gap: 8px;
+    .reveal-panel.open { display: table-row; }
+    .reveal-inner {
+      padding: 14px 16px;
+      background: #f8fcfe;
     }
-    .reveal-input-row input { flex: 1; font-size: 14px; padding: 9px 12px; }
+    .reveal-inner p { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+    .reveal-input-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .reveal-input-row input {
+      flex: 1; min-width: 180px;
+      font-size: 14px; padding: 8px 12px;
+      border: 1.5px solid var(--border); border-radius: 7px;
+      font-family: 'Inter', sans-serif; background: var(--white);
+    }
+    .reveal-input-row input:focus { outline: none; border-color: var(--cyan); }
     .btn-check {
       font-family: 'Syne', sans-serif;
-      font-size: 13px;
-      font-weight: 700;
-      padding: 9px 16px;
-      border-radius: 8px;
-      border: none;
-      background: var(--ocean);
-      color: var(--white);
-      cursor: pointer;
-      white-space: nowrap;
-      transition: opacity 0.15s;
+      font-size: 13px; font-weight: 700;
+      padding: 8px 16px; border-radius: 7px;
+      border: none; background: var(--ocean); color: var(--white);
+      cursor: pointer; white-space: nowrap; transition: opacity 0.15s;
     }
     .btn-check:hover { opacity: 0.85; }
 
@@ -373,21 +362,22 @@
       background: #E8F8FB;
       border: 1.5px solid var(--foam);
       border-radius: 8px;
-      padding: 12px 14px;
+      padding: 10px 14px;
       font-size: 14px;
-      gap: 6px;
-      flex-direction: column;
+      gap: 16px;
+      flex-wrap: wrap;
     }
     .contact-info.open { display: flex; }
     .contact-info a { color: var(--ocean); font-weight: 600; text-decoration: none; }
     .contact-info a:hover { text-decoration: underline; }
-    .contact-info .ci-label { color: var(--muted); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; }
+    .contact-info .ci-label { color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; display: block; margin-bottom: 2px; }
+    .reveal-error { font-size: 13px; color: #c0392b; margin-top: 8px; display: none; }
 
-    .reveal-error {
-      font-size: 13px;
-      color: #c0392b;
-      margin-top: 6px;
-      display: none;
+    /* responsive : sur mobile, masquer colonnes secondaires */
+    @media (max-width: 600px) {
+      .inscrits-table th.hide-mobile,
+      .inscrits-table td.hide-mobile { display: none; }
+      .td-course { min-width: 100px; }
     }
 
     .empty-state {
@@ -417,9 +407,9 @@
     <h1>Trouve ton<br/><span>Binôme</span></h1>
     <p>
       Le swimrun ça se fait à deux… encore faut-il trouver l'autre !
-      Inscris-toi ici pour signaler que tu cherches un binôme.
+      Inscris-toi ici pour signaler que tu cherches un·e binôme.
       Les autres inscrits pourront voir ton profil et te contacter directement.
-      <em>On ne joue pas les entremetteurs</em> — on te donne juste l'outil 😄
+      <em>On ne joue pas les entremetteur·ses</em> — on te donne juste l'outil 😄
     </p>
   </div>
   <div class="wave-wrap">
@@ -475,20 +465,19 @@
           <label for="commentaire">Commentaire <span class="opt">(optionnel)</span></label>
 			<span class="hint">Ex : Niveau débutant, j'y vais pour le fun 🎉</span>
 			<span class="hint">Ex : Objectif TOP 10, je cours à 3min/km et je cherche un binôme sérieux 💪</span>
-          <textarea id="commentaire" name="commentaire" placeholder="Dis-nous ton niveau, tes objectifs, ce que tu attends de ton futur binôme ou bien ce que tu veux…"></textarea>
-        <span></span><span></span>
-		</div>
+          <textarea id="commentaire" name="commentaire" placeholder="Dis-nous ton niveau, tes objectifs, ce que tu attends de ton futur binôme ou de ta future binôme…"></textarea>
+        </div>
       </div>
 
       <button type="submit" class="btn btn-primary" id="submitBtn">
-        🙋 Je cherche un binôme !
+        🙋 Je cherche un·e binôme !
       </button>
     </form>
   </div>
 
   <!-- LISTE DES INSCRITS -->
   <div class="section-header">
-    <h2>Qui cherche un binôme ?</h2>
+    <h2>Qui cherche un·e binôme ?</h2>
     <span class="count-badge" id="totalCount">0</span>
   </div>
 
@@ -499,7 +488,7 @@
 </main>
 
 <footer>
-  Fait avec 🌊 pour la communauté Lunchtime ·
+  Fait avec 🌊 pour la communauté swimrun ·
   <a href="admin.html">Admin</a>
 </footer>
 
@@ -538,7 +527,9 @@ async function ghGet(file) {
     throw new Error(`GitHub ${r.status}: ${err.message || 'Lecture impossible'}`);
   }
   const json = await r.json();
-  return { data: JSON.parse(atob(json.content)), sha: json.sha };
+  // Décodage UTF-8 correct (atob seul ne gère pas les accents)
+  const decoded = decodeURIComponent(escape(atob(json.content)));
+  return { data: JSON.parse(decoded), sha: json.sha };
 }
 
 async function ghPut(file, data, msg) {
@@ -582,6 +573,8 @@ async function ghPut(file, data, msg) {
 
   function populateSelect() {
     const sel = document.getElementById('course');
+    // Vider les options existantes sauf le placeholder
+    while (sel.options.length > 1) sel.remove(1);
     courses.forEach(c => {
       const o = document.createElement('option');
       o.value = o.textContent = c;
@@ -611,91 +604,113 @@ async function ghPut(file, data, msg) {
     });
   }
 
-  // ── LISTE ───────────────────────────────────────────────────────────────
+  // ── LISTE (format tableau) ──────────────────────────────────────────────
   function renderList() {
     const container = document.getElementById('listContainer');
     document.getElementById('totalCount').textContent = inscrits.length;
     container.innerHTML = '';
 
-    if (!inscrits.length) {
-      container.innerHTML = `<div class="empty-state"><span class="emoji">🌊</span>Sois le premier à t'inscrire !</div>`;
+    const filtered = filtreCourse === 'Tous'
+      ? inscrits
+      : inscrits.filter(i => i.course === filtreCourse);
+
+    if (!filtered.length) {
+      container.innerHTML = `<div class="empty-state"><span class="emoji">🌊</span>Sois le·la premier·e à t'inscrire !</div>`;
       return;
     }
 
-    const filtered = filtreCourse === 'Tous' ? inscrits : inscrits.filter(i => i.course === filtreCourse);
-    const byCourse = {};
-    filtered.forEach(i => {
-      if (!byCourse[i.course]) byCourse[i.course] = [];
-      byCourse[i.course].push(i);
-    });
+    const wrap = document.createElement('div');
+    wrap.className = 'table-wrap';
 
-    Object.entries(byCourse).forEach(([course, members]) => {
-      const group = document.createElement('div');
-      group.className = 'race-group';
-      const label = document.createElement('div');
-      label.className = 'race-label';
-      label.innerHTML = `${course} <span class="race-count">${members.length} personne${members.length > 1 ? 's' : ''}</span>`;
-      group.appendChild(label);
+    const table = document.createElement('table');
+    table.className = 'inscrits-table';
 
-      members.forEach(m => {
-        group.appendChild(buildCard(m));
-      });
+    // En-tête — masquer "Course" si on filtre déjà sur une course
+    const showCourse = filtreCourse === 'Tous';
+    table.innerHTML = `<thead><tr>
+      <th>Nom</th>
+      ${showCourse ? '<th class="hide-mobile">Course</th>' : ''}
+      <th class="hide-mobile">Date</th>
+      <th>Commentaire</th>
+      <th>Contact</th>
+    </tr></thead>`;
 
-      container.appendChild(group);
-    });
-  }
+    const tbody = document.createElement('tbody');
 
-  function buildCard(m) {
-    const card = document.createElement('div');
-    card.className = 'entry-card';
-    const dateStr = m.date ? new Date(m.date).toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' }) : '';
+    filtered.forEach((m, idx) => {
+      const dateStr = m.date
+        ? new Date(m.date).toLocaleDateString('fr-FR', { day:'numeric', month:'short', year:'numeric' })
+        : '';
+      const rowId = `row-${idx}`;
+      const panelId = `panel-${idx}`;
 
-    card.innerHTML = `
-      <div class="entry-top">
-        <span class="entry-name">${esc(m.prenom)} ${esc(m.nom)}</span>
-        <span class="entry-date">${dateStr}</span>
-      </div>
-      ${m.commentaire ? `<div class="entry-comment">« ${esc(m.commentaire)} »</div>` : ''}
-      <div class="contact-area">
-        <button class="btn-reveal" onclick="toggleReveal(this)">
-          🔒 Voir les coordonnées
-        </button>
-        <div class="reveal-form">
-          <p>Entre ton email pour accéder aux coordonnées.<br/>Tu dois être inscrit(e) pour voir celles des autres.</p>
+      // Ligne principale
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="td-name">${esc(m.prenom)} ${esc(m.nom)}</td>
+        ${showCourse ? `<td class="td-course hide-mobile">${esc(m.course)}</td>` : ''}
+        <td class="td-date hide-mobile">${dateStr}</td>
+        <td class="td-comment">${m.commentaire ? '« ' + esc(m.commentaire) + ' »' : '<span style="color:var(--muted);font-style:normal">—</span>'}</td>
+        <td><button class="btn-reveal" onclick="toggleReveal('${panelId}', this)">🔒 Coordonnées</button></td>`;
+      tbody.appendChild(tr);
+
+      // Ligne reveal (masquée par défaut)
+      const panelTr = document.createElement('tr');
+      panelTr.className = 'reveal-panel';
+      panelTr.id = panelId;
+      const colspan = showCourse ? 5 : 4;
+      panelTr.innerHTML = `<td colspan="${colspan}" style="padding:0">
+        <div class="reveal-inner">
+          <p>Entre ton email pour accéder aux coordonnées — tu dois être inscrit·e pour voir celles des autres.</p>
           <div class="reveal-input-row">
             <input type="email" placeholder="ton@email.com" class="reveal-email-input" />
-            <button class="btn-check" onclick="checkEmail(this, '${esc(m.email)}', '${esc(m.telephone)}')">Vérifier</button>
+            <button class="btn-check" onclick="checkEmail(this, '${esc(m.email)}', '${esc(m.telephone || '')}')">Vérifier</button>
           </div>
           <div class="reveal-error">❌ Cet email n'est pas dans la liste. Inscris-toi d'abord !</div>
+          <div class="contact-info">
+            ${m.email ? `<div><span class="ci-label">Email</span><a href="mailto:${esc(m.email)}">${esc(m.email)}</a></div>` : ''}
+            ${m.telephone ? `<div><span class="ci-label">Téléphone</span><a href="tel:${esc(m.telephone)}">${esc(m.telephone)}</a></div>` : ''}
+          </div>
         </div>
-        <div class="contact-info">
-          ${m.email ? `<div><span class="ci-label">Email</span><br/><a href="mailto:${esc(m.email)}">${esc(m.email)}</a></div>` : ''}
-          ${m.telephone ? `<div><span class="ci-label">Téléphone</span><br/><a href="tel:${esc(m.telephone)}">${esc(m.telephone)}</a></div>` : ''}
-        </div>
-      </div>`;
-    return card;
+      </td>`;
+      tbody.appendChild(panelTr);
+    });
+
+    table.appendChild(tbody);
+    wrap.appendChild(table);
+    container.appendChild(wrap);
   }
 
-  function toggleReveal(btn) {
-    const area = btn.closest('.contact-area');
-    const form = area.querySelector('.reveal-form');
-    const isOpen = form.classList.contains('open');
-    form.classList.toggle('open', !isOpen);
-    btn.textContent = isOpen ? '🔒 Voir les coordonnées' : '✕ Annuler';
-    if (!isOpen) area.querySelector('.reveal-email-input').focus();
+  function toggleReveal(panelId, btn) {
+    const panel = document.getElementById(panelId);
+    const isOpen = panel.classList.contains('open');
+    // Fermer tous les autres panneaux ouverts
+    document.querySelectorAll('.reveal-panel.open').forEach(p => {
+      p.classList.remove('open');
+      const prevBtn = p.previousElementSibling?.querySelector('.btn-reveal');
+      if (prevBtn) prevBtn.textContent = '🔒 Coordonnées';
+    });
+    if (!isOpen) {
+      panel.classList.add('open');
+      btn.textContent = '✕ Fermer';
+      panel.querySelector('.reveal-email-input').focus();
+    } else {
+      btn.textContent = '🔒 Coordonnées';
+    }
   }
 
   function checkEmail(btn, targetEmail, targetTel) {
-    const area = btn.closest('.contact-area');
-    const input = area.querySelector('.reveal-email-input');
-    const errDiv = area.querySelector('.reveal-error');
-    const contactDiv = area.querySelector('.contact-info');
+    const inner = btn.closest('.reveal-inner');
+    const input = inner.querySelector('.reveal-email-input');
+    const errDiv = inner.querySelector('.reveal-error');
+    const contactDiv = inner.querySelector('.contact-info');
     const val = input.value.trim().toLowerCase();
     const found = inscrits.some(i => i.email.toLowerCase() === val);
 
     if (found) {
-      area.querySelector('.reveal-form').classList.remove('open');
-      area.querySelector('.btn-reveal').style.display = 'none';
+      input.style.display = 'none';
+      btn.style.display = 'none';
+      inner.querySelector('p').style.display = 'none';
       contactDiv.classList.add('open');
       errDiv.style.display = 'none';
     } else {
@@ -743,7 +758,7 @@ async function ghPut(file, data, msg) {
       await ghPut(DATA_FILE, updated, `Nouvel inscrit : ${data.prenom} ${data.nom}`);
       inscrits = updated;
       form.reset();
-      showToast('🎉 Inscription enregistrée ! Bonne chance pour trouver ton binôme !');
+      showToast('🎉 Inscription enregistrée ! Bonne chance pour trouver ton·ta binôme !');
       renderFilters();
       renderList();
     } catch(err) {
@@ -752,7 +767,7 @@ async function ghPut(file, data, msg) {
     }
 
     btn.disabled = false;
-    btn.textContent = '🙋 Je cherche un binôme !';
+    btn.textContent = '🙋 Je cherche un·e binôme !';
   });
 
   // ── UTIL ────────────────────────────────────────────────────────────────
