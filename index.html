@@ -260,63 +260,72 @@
     }
 
     /* ── TABLEAU INSCRITS ── */
-    .table-wrap { overflow-x: auto; border-radius: var(--radius); box-shadow: var(--shadow); }
+    .table-wrap {
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden; /* pas de scroll horizontal */
+    }
     .inscrits-table {
       width: 100%;
       border-collapse: collapse;
       font-size: 14px;
       background: var(--white);
+      table-layout: fixed; /* colonnes en % fixes, pas de débordement */
     }
-    .inscrits-table thead tr {
-      background: var(--ocean);
-    }
+    .inscrits-table thead tr { background: var(--ocean); }
     .inscrits-table th {
       font-family: 'Syne', sans-serif;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       letter-spacing: 0.06em;
       text-transform: uppercase;
       color: var(--foam);
-      padding: 13px 16px;
+      padding: 12px 14px;
       text-align: left;
-      white-space: nowrap;
     }
     .inscrits-table td {
-      padding: 13px 16px;
+      padding: 12px 14px;
       border-bottom: 1px solid var(--border);
       vertical-align: top;
       color: var(--text);
+      overflow: hidden;
     }
     .inscrits-table tbody tr:last-child td { border-bottom: none; }
     .inscrits-table tbody tr:hover td { background: #f4fafd; }
 
+    /* Largeurs des colonnes : Course 22%, Nom 18%, Commentaire auto, Contact 110px fixe */
+    .inscrits-table col.col-course  { width: 22%; }
+    .inscrits-table col.col-name    { width: 18%; }
+    .inscrits-table col.col-comment { width: auto; }
+    .inscrits-table col.col-action  { width: 110px; }
+
     .td-name {
       font-family: 'Syne', sans-serif;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
       color: var(--ocean);
-      white-space: nowrap;
+      word-break: break-word;
     }
     .td-course {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--muted);
-      min-width: 140px;
+      word-break: break-word;
+      line-height: 1.4;
     }
     .td-comment {
-      font-style: italic;
-      color: #3D5A6A;
       font-size: 13px;
+      color: #3D5A6A;
       line-height: 1.5;
-      max-width: 220px;
+      word-break: break-word;
     }
-    .td-date { font-size: 12px; color: var(--muted); white-space: nowrap; }
+    .td-action { vertical-align: middle; }
 
-    /* contact reveal dans le tableau */
+    /* bouton coordonnées */
     .btn-reveal {
       font-family: 'Inter', sans-serif;
       font-size: 12px;
       font-weight: 600;
-      padding: 6px 12px;
+      padding: 6px 10px;
       border-radius: 6px;
       border: 1.5px solid var(--cyan);
       background: transparent;
@@ -324,24 +333,22 @@
       cursor: pointer;
       transition: all 0.18s;
       white-space: nowrap;
+      width: 100%;
     }
     .btn-reveal:hover { background: var(--cyan); color: var(--white); }
 
-    /* panneau reveal — s'affiche sous la ligne du tableau */
-    .reveal-panel {
-      display: none;
-      background: var(--white);
-      border-top: 1px solid var(--border);
-    }
+    /* panneau reveal sous la ligne */
+    .reveal-panel { display: none; }
     .reveal-panel.open { display: table-row; }
     .reveal-inner {
       padding: 14px 16px;
       background: #f8fcfe;
+      border-top: 1px solid var(--border);
     }
     .reveal-inner p { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
     .reveal-input-row { display: flex; gap: 8px; flex-wrap: wrap; }
     .reveal-input-row input {
-      flex: 1; min-width: 180px;
+      flex: 1; min-width: 160px;
       font-size: 14px; padding: 8px 12px;
       border: 1.5px solid var(--border); border-radius: 7px;
       font-family: 'Inter', sans-serif; background: var(--white);
@@ -350,41 +357,62 @@
     .btn-check {
       font-family: 'Syne', sans-serif;
       font-size: 13px; font-weight: 700;
-      padding: 8px 16px; border-radius: 7px;
+      padding: 8px 14px; border-radius: 7px;
       border: none; background: var(--ocean); color: var(--white);
       cursor: pointer; white-space: nowrap; transition: opacity 0.15s;
     }
     .btn-check:hover { opacity: 0.85; }
-
     .contact-info {
-      display: none;
-      margin-top: 10px;
-      background: #E8F8FB;
-      border: 1.5px solid var(--foam);
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 14px;
-      gap: 16px;
-      flex-wrap: wrap;
+      display: none; margin-top: 10px;
+      background: #E8F8FB; border: 1.5px solid var(--foam);
+      border-radius: 8px; padding: 10px 14px;
+      font-size: 14px; gap: 16px; flex-wrap: wrap;
     }
     .contact-info.open { display: flex; }
     .contact-info a { color: var(--ocean); font-weight: 600; text-decoration: none; }
     .contact-info a:hover { text-decoration: underline; }
-    .contact-info .ci-label { color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; display: block; margin-bottom: 2px; }
+    .contact-info .ci-label {
+      color: var(--muted); font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.07em;
+      display: block; margin-bottom: 2px;
+    }
     .reveal-error { font-size: 13px; color: #c0392b; margin-top: 8px; display: none; }
 
-    /* responsive : sur mobile, masquer colonnes secondaires */
-    @media (max-width: 600px) {
-      .inscrits-table th.hide-mobile,
-      .inscrits-table td.hide-mobile { display: none; }
-      .td-course { min-width: 100px; }
+    /* Mobile : on passe en layout vertical par carte */
+    @media (max-width: 580px) {
+      .table-wrap { box-shadow: none; border-radius: 0; }
+      .inscrits-table, .inscrits-table thead, .inscrits-table tbody,
+      .inscrits-table th, .inscrits-table td, .inscrits-table tr {
+        display: block;
+      }
+      .inscrits-table thead { display: none; }
+      .inscrits-table tbody tr {
+        background: var(--white);
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+        margin-bottom: 12px;
+        padding: 14px;
+        border: 1.5px solid var(--border);
+      }
+      .inscrits-table tbody tr:hover { border-color: var(--cyan); }
+      .inscrits-table td {
+        padding: 4px 0;
+        border: none;
+        overflow: visible;
+      }
+      .td-name { font-size: 16px; margin-bottom: 2px; }
+      .td-course { margin-bottom: 6px; }
+      .td-comment { margin-bottom: 10px; }
+      .td-action { }
+      .btn-reveal { width: auto; }
+      .reveal-panel { display: none !important; }
+      .reveal-panel.open { display: block !important; }
+      .reveal-panel td { padding: 0; }
     }
 
     .empty-state {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--muted);
-      font-size: 15px;
+      text-align: center; padding: 40px 20px;
+      color: var(--muted); font-size: 15px;
     }
     .empty-state .emoji { font-size: 36px; display: block; margin-bottom: 10px; }
 
@@ -528,7 +556,10 @@ async function ghGet(file) {
   }
   const json = await r.json();
   // Décodage UTF-8 correct (atob seul ne gère pas les accents)
-  const decoded = decodeURIComponent(escape(atob(json.content)));
+  // Décodage UTF-8 robuste via TextDecoder
+  const raw = atob(json.content.replace(/\n/g, ''));
+  const bytes = Uint8Array.from(raw, c => c.charCodeAt(0));
+  const decoded = new TextDecoder('utf-8').decode(bytes);
   return { data: JSON.parse(decoded), sha: json.sha };
 }
 
@@ -627,13 +658,19 @@ async function ghPut(file, data, msg) {
 
     // En-tête — masquer "Course" si on filtre déjà sur une course
     const showCourse = filtreCourse === 'Tous';
-    table.innerHTML = `<thead><tr>
-      <th>Nom</th>
-      ${showCourse ? '<th class="hide-mobile">Course</th>' : ''}
-      <th class="hide-mobile">Date</th>
-      <th>Commentaire</th>
-      <th>Contact</th>
-    </tr></thead>`;
+    table.innerHTML = `
+      <colgroup>
+        ${showCourse ? '<col class="col-course">' : ''}
+        <col class="col-name">
+        <col class="col-comment">
+        <col class="col-action">
+      </colgroup>
+      <thead><tr>
+        ${showCourse ? '<th>Course</th>' : ''}
+        <th>Nom</th>
+        <th>Commentaire</th>
+        <th>Contact</th>
+      </tr></thead>`;
 
     const tbody = document.createElement('tbody');
 
@@ -647,18 +684,17 @@ async function ghPut(file, data, msg) {
       // Ligne principale
       const tr = document.createElement('tr');
       tr.innerHTML = `
+        ${showCourse ? `<td class="td-course">${esc(m.course)}</td>` : ''}
         <td class="td-name">${esc(m.prenom)} ${esc(m.nom)}</td>
-        ${showCourse ? `<td class="td-course hide-mobile">${esc(m.course)}</td>` : ''}
-        <td class="td-date hide-mobile">${dateStr}</td>
-        <td class="td-comment">${m.commentaire ? '« ' + esc(m.commentaire) + ' »' : '<span style="color:var(--muted);font-style:normal">—</span>'}</td>
-        <td><button class="btn-reveal" onclick="toggleReveal('${panelId}', this)">🔒 Coordonnées</button></td>`;
+        <td class="td-comment">${m.commentaire ? esc(m.commentaire) : '<span style="color:var(--muted);font-style:normal">—</span>'}</td>
+        <td class="td-action"><button class="btn-reveal" onclick="toggleReveal('${panelId}', this)">🔒 Coordonnées</button></td>`;
       tbody.appendChild(tr);
 
       // Ligne reveal (masquée par défaut)
       const panelTr = document.createElement('tr');
       panelTr.className = 'reveal-panel';
       panelTr.id = panelId;
-      const colspan = showCourse ? 5 : 4;
+      const colspan = showCourse ? 4 : 3;
       panelTr.innerHTML = `<td colspan="${colspan}" style="padding:0">
         <div class="reveal-inner">
           <p>Entre ton email pour accéder aux coordonnées — tu dois être inscrit·e pour voir celles des autres.</p>
