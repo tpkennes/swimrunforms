@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Swimrun Binôme</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ocean: #0A2540; --cyan: #00B4D8; --foam: #90E0EF;
+      --bg: #F0F7FA; --coral: #FF6B35; --white: #FFFFFF;
+      --text: #1A2E3B; --muted: #6B8A99; --border: #D0E8F0;
+      --danger: #c0392b; --radius: 14px; --shadow: 0 4px 24px rgba(10,37,64,0.10);
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* LOGIN */
+    .login-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .login-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 40px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+    .login-card h1 { font-family:'Syne',sans-serif; font-size:24px; color:var(--ocean); margin-bottom:8px; }
+    .login-card p { color:var(--muted); font-size:14px; margin-bottom:24px; }
+    .login-card input {
+      width:100%; padding:12px 14px; border:1.5px solid var(--border);
+      border-radius:8px; font-size:15px; font-family:'Inter',sans-serif;
+      margin-bottom:12px; background:var(--bg);
+    }
+    .login-card input:focus { outline:none; border-color:var(--cyan); }
+    .login-error { color:var(--danger); font-size:13px; margin-bottom:10px; display:none; }
+
+    /* ADMIN */
+    .admin-header {
+      background: var(--ocean);
+      color: var(--white);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .admin-header h1 { font-family:'Syne',sans-serif; font-size:20px; }
+    .admin-header a { color:var(--foam); font-size:13px; text-decoration:none; }
+
+    .admin-main { max-width:900px; margin:0 auto; padding:32px 16px 80px; }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .stat-card {
+      background:var(--white); border-radius:10px; padding:16px;
+      text-align:center; box-shadow:var(--shadow);
+    }
+    .stat-card .num { font-family:'Syne',sans-serif; font-size:28px; font-weight:800; color:var(--ocean); }
+    .stat-card .lbl { font-size:12px; color:var(--muted); margin-top:4px; }
+
+    /* COURSES EDITOR */
+    .section-title {
+      font-family:'Syne',sans-serif; font-size:18px; font-weight:700;
+      color:var(--ocean); margin-bottom:14px;
+      display:flex; align-items:center; gap:10px;
+    }
+    .card { background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); padding:24px; margin-bottom:24px; }
+
+    .course-item {
+      display:flex; align-items:center; gap:10px;
+      padding:10px 0;
+      border-bottom:1px solid var(--border);
+    }
+    .course-item:last-child { border-bottom:none; }
+    .course-item span { flex:1; font-size:14px; }
+    .course-item input { flex:1; font-size:14px; padding:6px 10px; border:1.5px solid var(--cyan); border-radius:6px; font-family:'Inter',sans-serif; }
+
+    .btn { display:inline-flex; align-items:center; gap:6px; font-family:'Syne',sans-serif; font-size:14px; font-weight:700; padding:9px 16px; border-radius:8px; border:none; cursor:pointer; transition:opacity 0.15s; }
+    .btn:hover { opacity:0.85; }
+    .btn-sm { font-size:12px; padding:6px 12px; }
+    .btn-primary { background:var(--coral); color:var(--white); }
+    .btn-ocean { background:var(--ocean); color:var(--white); }
+    .btn-danger { background:var(--danger); color:var(--white); }
+    .btn-ghost { background:transparent; border:1.5px solid var(--border); color:var(--muted); }
+    .btn-ghost:hover { border-color:var(--cyan); color:var(--ocean); }
+
+    .new-course-row { display:flex; gap:10px; margin-top:14px; }
+    .new-course-row input { flex:1; padding:9px 12px; border:1.5px solid var(--border); border-radius:8px; font-family:'Inter',sans-serif; font-size:14px; background:var(--bg); }
+    .new-course-row input:focus { outline:none; border-color:var(--cyan); }
+
+    /* TABLE */
+    .table-wrap { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; font-size:14px; }
+    th { background:var(--ocean); color:var(--white); font-family:'Syne',sans-serif; font-size:13px; font-weight:700; padding:12px 14px; text-align:left; white-space:nowrap; }
+    td { padding:12px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+    tr:hover td { background:#F8FCFE; }
+    .td-comment { font-style:italic; color:var(--muted); max-width:200px; font-size:13px; }
+
+    /* EDIT MODAL */
+    .modal-overlay {
+      display:none; position:fixed; inset:0;
+      background:rgba(10,37,64,0.5); z-index:200;
+      align-items:center; justify-content:center; padding:16px;
+    }
+    .modal-overlay.open { display:flex; }
+    .modal {
+      background:var(--white); border-radius:var(--radius);
+      padding:28px; width:100%; max-width:480px;
+      box-shadow:0 8px 40px rgba(10,37,64,0.25);
+    }
+    .modal h2 { font-family:'Syne',sans-serif; font-size:20px; color:var(--ocean); margin-bottom:20px; }
+    .modal .form-group { display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
+    .modal label { font-size:13px; font-weight:600; color:var(--ocean); }
+    .modal input, .modal select, .modal textarea {
+      font-family:'Inter',sans-serif; font-size:14px; padding:10px 12px;
+      border:1.5px solid var(--border); border-radius:8px; background:var(--bg);
+    }
+    .modal input:focus, .modal textarea:focus { outline:none; border-color:var(--cyan); }
+    .modal textarea { min-height:80px; resize:vertical; }
+    .modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:6px; }
+
+    /* TOAST */
+    .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--ocean); color:var(--white); padding:14px 24px; border-radius:10px; font-size:15px; font-weight:500; box-shadow:0 8px 32px rgba(10,37,64,0.25); transition:transform 0.3s ease; z-index:300; white-space:nowrap; }
+    .toast.show { transform:translateX(-50%) translateY(0); }
+    .toast.error { background:var(--danger); }
+
+    @media (max-width:480px) {
+      .admin-main { padding:20px 12px 60px; }
+      .card { padding:16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── LOGIN ── -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-card">
+    <h1>🔐 Administration</h1>
+    <p>Accès réservé à l'admin du site Swimrun Binôme</p>
+    <div class="login-error" id="loginError">Mot de passe incorrect.</div>
+    <input type="password" id="pwdInput" placeholder="Mot de passe" />
+    <button class="btn btn-ocean" style="width:100%" onclick="checkPwd()">Connexion</button>
+  </div>
+</div>
+
+<!-- ── ADMIN INTERFACE ── -->
+<div id="adminWrap" style="display:none">
+
+  <div class="admin-header">
+    <h1>🏊 Admin — Swimrun Binôme</h1>
+    <div style="display:flex;gap:16px;align-items:center">
+      <a href="index.html">← Voir le site</a>
+      <button class="btn btn-ghost btn-sm" onclick="logout()" style="color:#fff;border-color:rgba(255,255,255,0.3)">Déconnexion</button>
+    </div>
+  </div>
+
+  <div class="admin-main">
+
+    <!-- STATS -->
+    <div class="stats-row" id="statsRow"></div>
+
+    <!-- COURSES -->
+    <div class="card">
+      <div class="section-title">📋 Courses de la saison</div>
+      <div id="coursesList"></div>
+      <div class="new-course-row">
+        <input type="text" id="newCourseInput" placeholder="Nom de la nouvelle course…" />
+        <button class="btn btn-primary btn-sm" onclick="addCourse()">+ Ajouter</button>
+      </div>
+      <div style="margin-top:14px">
+        <button class="btn btn-ocean btn-sm" onclick="saveCourses()">💾 Sauvegarder les courses</button>
+      </div>
+    </div>
+
+    <!-- INSCRITS -->
+    <div class="card">
+      <div class="section-title">👥 Inscrits <span style="font-size:14px;font-weight:400;color:var(--muted)" id="inscritCount"></span></div>
+      <div class="table-wrap">
+        <table id="inscritTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Nom</th>
+              <th>Course</th>
+              <th>Email</th>
+              <th>Téléphone</th>
+              <th>Commentaire</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="inscritBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── MODAL EDIT ── -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <h2>✏️ Modifier l'inscription</h2>
+    <input type="hidden" id="editId" />
+    <div class="form-group">
+      <label>Course</label>
+      <select id="editCourse"></select>
+    </div>
+    <div class="form-group">
+      <label>Nom</label>
+      <input type="text" id="editNom" />
+    </div>
+    <div class="form-group">
+      <label>Prénom</label>
+      <input type="text" id="editPrenom" />
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="editEmail" />
+    </div>
+    <div class="form-group">
+      <label>Téléphone</label>
+      <input type="tel" id="editTelephone" />
+    </div>
+    <div class="form-group">
+      <label>Commentaire</label>
+      <textarea id="editCommentaire"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
+      <button class="btn btn-ocean" onclick="saveEdit()">💾 Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── CONFIG ──────────────────────────────────────────────────────────────
+  const ADMIN_PASSWORD = 'swimrun2025'; // ← Change ce mot de passe !
+  const GITHUB_TOKEN   = 'TON_TOKEN_GITHUB_ICI';
+  const GITHUB_OWNER   = 'ton-username';
+  const GITHUB_REPO    = 'swimrun-binome';
+  const DATA_FILE      = 'data.json';
+  const COURSES_FILE   = 'courses.json';
+
+  let inscrits = [];
+  let courses  = [];
+
+  // ── AUTH ────────────────────────────────────────────────────────────────
+  function checkPwd() {
+    const v = document.getElementById('pwdInput').value;
+    if (v === ADMIN_PASSWORD) {
+      sessionStorage.setItem('admin_ok', '1');
+      document.getElementById('loginWrap').style.display = 'none';
+      document.getElementById('adminWrap').style.display = 'block';
+      load();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+    }
+  }
+  document.getElementById('pwdInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkPwd(); });
+  function logout() { sessionStorage.removeItem('admin_ok'); location.reload(); }
+  if (sessionStorage.getItem('admin_ok')) {
+    document.getElementById('loginWrap').style.display = 'none';
+    document.getElementById('adminWrap').style.display = 'block';
+  }
+
+  // ── TOAST ───────────────────────────────────────────────────────────────
+  function showToast(msg, err = false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (err ? ' error' : '');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  // ── GITHUB API ──────────────────────────────────────────────────────────
+  let dataShaSaved = null;
+  let coursesShaSaved = null;
+
+  async function ghGet(file) {
+    const r = await fetch(
+      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${file}`,
+      { headers: { Authorization: `token ${GITHUB_TOKEN}` } }
+    );
+    if (!r.ok) throw new Error('Lecture impossible');
+    const json = await r.json();
+    return { data: JSON.parse(atob(json.content)), sha: json.sha };
+  }
+
+  async function ghPut(file, data, sha, msg) {
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+    const r = await fetch(
+      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${file}`,
+      {
+        method: 'PUT',
+        headers: { Authorization: `token ${GITHUB_TOKEN}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: msg, content, sha })
+      }
+    );
+    if (!r.ok) throw new Error('Écriture impossible');
+    const json = await r.json();
+    return json.content.sha;
+  }
+
+  // ── CHARGEMENT ──────────────────────────────────────────────────────────
+  async function load() {
+    if (!sessionStorage.getItem('admin_ok')) return;
+    try {
+      const [c, d] = await Promise.all([ghGet(COURSES_FILE), ghGet(DATA_FILE)]);
+      courses = c.data; coursesShaSaved = c.sha;
+      inscrits = d.data; dataShaSaved = d.sha;
+    } catch {
+      try {
+        const [rc, rd] = await Promise.all([
+          fetch('courses.json').then(r => r.json()),
+          fetch('data.json').then(r => r.json())
+        ]);
+        courses = rc; inscrits = rd;
+      } catch { courses = []; inscrits = []; }
+    }
+    renderStats();
+    renderCourses();
+    renderTable();
+  }
+
+  // ── STATS ───────────────────────────────────────────────────────────────
+  function renderStats() {
+    const el = document.getElementById('statsRow');
+    const byCourse = {};
+    courses.forEach(c => byCourse[c] = 0);
+    inscrits.forEach(i => { if (byCourse[i.course] !== undefined) byCourse[i.course]++; });
+
+    const mainStat = `<div class="stat-card"><div class="num">${inscrits.length}</div><div class="lbl">Inscrits total</div></div>`;
+    const courseStats = courses.map(c =>
+      `<div class="stat-card"><div class="num">${byCourse[c] || 0}</div><div class="lbl">${c.split('—')[0].trim()}</div></div>`
+    ).join('');
+    el.innerHTML = mainStat + courseStats;
+  }
+
+  // ── COURSES ─────────────────────────────────────────────────────────────
+  function renderCourses() {
+    const el = document.getElementById('coursesList');
+    el.innerHTML = courses.map((c, i) => `
+      <div class="course-item" data-index="${i}">
+        <input type="text" value="${esc(c)}" onchange="courses[${i}]=this.value" />
+        <button class="btn btn-danger btn-sm" onclick="deleteCourse(${i})">🗑</button>
+      </div>
+    `).join('');
+    updateEditSelect();
+  }
+
+  function addCourse() {
+    const inp = document.getElementById('newCourseInput');
+    const val = inp.value.trim();
+    if (!val) return;
+    courses.push(val);
+    inp.value = '';
+    renderCourses();
+  }
+
+  function deleteCourse(i) {
+    if (!confirm(`Supprimer "${courses[i]}" ?`)) return;
+    courses.splice(i, 1);
+    renderCourses();
+  }
+
+  async function saveCourses() {
+    try {
+      if (coursesShaSaved) {
+        coursesShaSaved = await ghPut(COURSES_FILE, courses, coursesShaSaved, 'Mise à jour des courses');
+      }
+      showToast('✅ Courses sauvegardées !');
+    } catch {
+      showToast('⚠️ (démo) Sauvegarde simulée', false);
+    }
+  }
+
+  // ── TABLE INSCRITS ──────────────────────────────────────────────────────
+  function renderTable() {
+    document.getElementById('inscritCount').textContent = `— ${inscrits.length} inscrit${inscrits.length > 1 ? 's' : ''}`;
+    const tbody = document.getElementById('inscritBody');
+    if (!inscrits.length) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:32px">Aucun inscrit pour le moment</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = inscrits.map((m, i) => `
+      <tr>
+        <td style="white-space:nowrap">${m.date || '—'}</td>
+        <td style="white-space:nowrap"><strong>${esc(m.prenom)} ${esc(m.nom)}</strong></td>
+        <td style="font-size:13px">${esc(m.course)}</td>
+        <td><a href="mailto:${esc(m.email)}" style="color:var(--cyan)">${esc(m.email)}</a></td>
+        <td>${esc(m.telephone) || '—'}</td>
+        <td class="td-comment">${esc(m.commentaire) || '—'}</td>
+        <td style="white-space:nowrap">
+          <button class="btn btn-ghost btn-sm" onclick="openEdit(${i})" style="margin-right:4px">✏️</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteInscrit(${i})">🗑</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // ── SUPPRIMER ───────────────────────────────────────────────────────────
+  async function deleteInscrit(i) {
+    const m = inscrits[i];
+    if (!confirm(`Supprimer l'inscription de ${m.prenom} ${m.nom} ?`)) return;
+    inscrits.splice(i, 1);
+    try {
+      if (dataShaSaved) dataShaSaved = await ghPut(DATA_FILE, inscrits, dataShaSaved, `Suppression : ${m.prenom} ${m.nom}`);
+      showToast('🗑️ Inscription supprimée');
+    } catch { showToast('🗑️ (démo) Suppression simulée'); }
+    renderStats(); renderTable();
+  }
+
+  // ── ÉDITER ──────────────────────────────────────────────────────────────
+  function updateEditSelect() {
+    const sel = document.getElementById('editCourse');
+    sel.innerHTML = courses.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
+  }
+
+  function openEdit(i) {
+    const m = inscrits[i];
+    document.getElementById('editId').value = i;
+    document.getElementById('editCourse').value = m.course;
+    document.getElementById('editNom').value = m.nom;
+    document.getElementById('editPrenom').value = m.prenom;
+    document.getElementById('editEmail').value = m.email;
+    document.getElementById('editTelephone').value = m.telephone || '';
+    document.getElementById('editCommentaire').value = m.commentaire || '';
+    document.getElementById('editModal').classList.add('open');
+  }
+
+  function closeModal() { document.getElementById('editModal').classList.remove('open'); }
+
+  async function saveEdit() {
+    const i = parseInt(document.getElementById('editId').value);
+    inscrits[i] = {
+      ...inscrits[i],
+      course: document.getElementById('editCourse').value,
+      nom: document.getElementById('editNom').value.trim(),
+      prenom: document.getElementById('editPrenom').value.trim(),
+      email: document.getElementById('editEmail').value.trim().toLowerCase(),
+      telephone: document.getElementById('editTelephone').value.trim(),
+      commentaire: document.getElementById('editCommentaire').value.trim()
+    };
+    try {
+      if (dataShaSaved) {
+        const m = inscrits[i];
+        dataShaSaved = await ghPut(DATA_FILE, inscrits, dataShaSaved, `Modification : ${m.prenom} ${m.nom}`);
+      }
+      showToast('✅ Inscription mise à jour');
+    } catch { showToast('✅ (démo) Mise à jour simulée'); }
+    closeModal(); renderStats(); renderTable();
+  }
+
+  function esc(s) {
+    return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  if (sessionStorage.getItem('admin_ok')) load();
+</script>
+</body>
+</html>

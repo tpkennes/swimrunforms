@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trouve ton Binôme — Swimrun</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ocean:   #0A2540;
+      --cyan:    #00B4D8;
+      --foam:    #90E0EF;
+      --bg:      #F0F7FA;
+      --coral:   #FF6B35;
+      --white:   #FFFFFF;
+      --text:    #1A2E3B;
+      --muted:   #6B8A99;
+      --border:  #D0E8F0;
+      --card:    #FFFFFF;
+      --radius:  14px;
+      --shadow:  0 4px 24px rgba(10,37,64,0.10);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--ocean) 0%, #0E3460 60%, #1565a8 100%);
+      color: var(--white);
+      padding: 48px 24px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(0,180,216,0.18);
+      border: 1px solid rgba(0,180,216,0.4);
+      color: var(--foam);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 18px;
+    }
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(32px, 7vw, 56px);
+      font-weight: 800;
+      line-height: 1.05;
+      margin-bottom: 20px;
+    }
+    .hero h1 span { color: var(--cyan); }
+    .hero p {
+      font-size: clamp(15px, 2.5vw, 17px);
+      line-height: 1.7;
+      color: rgba(255,255,255,0.85);
+      max-width: 580px;
+      margin-bottom: 32px;
+    }
+    .hero p em {
+      font-style: normal;
+      color: var(--foam);
+      font-weight: 600;
+    }
+
+    /* vague SVG */
+    .wave-wrap {
+      line-height: 0;
+      margin-top: 16px;
+    }
+    .wave-wrap svg { width: 100%; display: block; }
+
+    /* ── LAYOUT ── */
+    .main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 40px 16px 80px;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 32px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 480px) {
+      .card { padding: 20px 16px; }
+    }
+
+    .card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--ocean);
+      margin-bottom: 6px;
+    }
+    .card-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    /* ── FORM ── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 520px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ocean);
+      letter-spacing: 0.02em;
+    }
+    label .req { color: var(--coral); margin-left: 2px; }
+    label .opt { color: var(--muted); font-weight: 400; font-size: 12px; margin-left: 4px; }
+
+    input, select, textarea {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(0,180,216,0.15);
+    }
+    textarea { resize: vertical; min-height: 90px; }
+    select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B8A99' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+
+    .hint {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* honeypot */
+    .hp { display: none !important; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Syne', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary {
+      background: var(--coral);
+      color: var(--white);
+      box-shadow: 0 4px 16px rgba(255,107,53,0.30);
+      width: 100%;
+      margin-top: 8px;
+    }
+    .btn-primary:hover { box-shadow: 0 6px 24px rgba(255,107,53,0.40); transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--ocean);
+      color: var(--white);
+      padding: 14px 24px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 500;
+      box-shadow: 0 8px 32px rgba(10,37,64,0.25);
+      transition: transform 0.3s ease;
+      z-index: 100;
+      white-space: nowrap;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.error { background: #c0392b; }
+
+    /* ── FILTRES ── */
+    .filters-wrap {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .filter-btn {
+      font-size: 13px;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 20px;
+      border: 1.5px solid var(--border);
+      background: var(--white);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .filter-btn:hover { border-color: var(--cyan); color: var(--ocean); }
+    .filter-btn.active {
+      background: var(--ocean);
+      border-color: var(--ocean);
+      color: var(--white);
+    }
+
+    /* ── SECTION TITRE ── */
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .section-header h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ocean);
+    }
+    .count-badge {
+      background: var(--cyan);
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 12px;
+    }
+
+    /* ── RACE GROUP ── */
+    .race-group { margin-bottom: 28px; }
+    .race-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      background: var(--ocean);
+      display: inline-block;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+    .race-count {
+      font-size: 12px;
+      color: var(--muted);
+      margin-left: 8px;
+      font-weight: 400;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    /* ── INSCRIT CARD ── */
+    .entry-card {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 10px;
+      transition: border-color 0.2s;
+    }
+    .entry-card:hover { border-color: var(--cyan); }
+
+    .entry-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .entry-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--ocean);
+    }
+    .entry-date {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .entry-comment {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #3D5A6A;
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    /* contact reveal */
+    .contact-area { margin-top: 12px; }
+    .btn-reveal {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1.5px solid var(--cyan);
+      background: transparent;
+      color: var(--cyan);
+      cursor: pointer;
+      transition: all 0.18s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-reveal:hover { background: var(--cyan); color: var(--white); }
+
+    .reveal-form {
+      display: none;
+      margin-top: 10px;
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .reveal-form.open { display: block; }
+    .reveal-form p { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+    .reveal-input-row {
+      display: flex;
+      gap: 8px;
+    }
+    .reveal-input-row input { flex: 1; font-size: 14px; padding: 9px 12px; }
+    .btn-check {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 9px 16px;
+      border-radius: 8px;
+      border: none;
+      background: var(--ocean);
+      color: var(--white);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.15s;
+    }
+    .btn-check:hover { opacity: 0.85; }
+
+    .contact-info {
+      display: none;
+      margin-top: 10px;
+      background: #E8F8FB;
+      border: 1.5px solid var(--foam);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 14px;
+      gap: 6px;
+      flex-direction: column;
+    }
+    .contact-info.open { display: flex; }
+    .contact-info a { color: var(--ocean); font-weight: 600; text-decoration: none; }
+    .contact-info a:hover { text-decoration: underline; }
+    .contact-info .ci-label { color: var(--muted); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; }
+
+    .reveal-error {
+      font-size: 13px;
+      color: #c0392b;
+      margin-top: 6px;
+      display: none;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+    .empty-state .emoji { font-size: 36px; display: block; margin-bottom: 10px; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    footer a { color: var(--cyan); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<header class="hero">
+  <div class="hero-inner">
+    <span class="hero-badge">🏊 Swimrun · Saison 2026</span>
+    <h1>Trouve ton<br/><span>Binôme</span></h1>
+    <p>
+      Le swimrun ça se fait à deux… encore faut-il trouver l'autre !
+      Inscris-toi ici pour signaler que tu cherches un binôme.
+      Les autres inscrits pourront voir ton profil et te contacter directement.
+      <em>On ne joue pas les entremetteurs</em> — on te donne juste l'outil 😄
+    </p>
+  </div>
+  <div class="wave-wrap">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,40 C240,80 480,0 720,40 C960,80 1200,0 1440,40 L1440,80 L0,80 Z" fill="#F0F7FA"/>
+    </svg>
+  </div>
+</header>
+
+<!-- ── MAIN ── -->
+<main class="main">
+
+  <!-- FORMULAIRE -->
+  <div class="card" id="form-card">
+    <div class="card-title">Je m'inscris</div>
+    <div class="card-sub">Tous les champs marqués * sont obligatoires</div>
+
+    <form id="inscriptionForm" novalidate>
+      <!-- honeypot anti-spam -->
+      <div class="hp" aria-hidden="true">
+        <input type="text" name="website" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group full">
+          <label for="course">Course <span class="req">*</span></label>
+          <select id="course" name="course" required>
+            <option value="">— Sélectionne ta course —</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="nom">Nom <span class="req">*</span></label>
+          <input type="text" id="nom" name="nom" placeholder="Dupont" required autocomplete="family-name" />
+        </div>
+
+        <div class="form-group">
+          <label for="prenom">Prénom <span class="req">*</span></label>
+          <input type="text" id="prenom" name="prenom" placeholder="Jean" required autocomplete="given-name" />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email <span class="req">*</span></label>
+          <input type="email" id="email" name="email" placeholder="jean@email.com" required autocomplete="email" />
+        </div>
+
+        <div class="form-group">
+          <label for="telephone">Téléphone <span class="opt">(optionnel)</span></label>
+          <input type="tel" id="telephone" name="telephone" placeholder="87 12 34 56" autocomplete="tel" />
+        </div>
+
+        <div class="form-group full">
+          <label for="commentaire">Commentaire <span class="opt">(optionnel)</span></label>
+			<span class="hint">Ex : Niveau débutant, j'y vais pour le fun 🎉</span>
+			<span class="hint">Ex : Objectif TOP 10, je cours à 3min/km et je cherche un binôme sérieux 💪</span>
+          <textarea id="commentaire" name="commentaire" placeholder="Dis-nous ton niveau, tes objectifs, ce que tu attends de ton futur binôme ou bien ce que tu veux…"></textarea>
+        <span></span><span></span>
+		</div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" id="submitBtn">
+        🙋 Je cherche un binôme !
+      </button>
+    </form>
+  </div>
+
+  <!-- LISTE DES INSCRITS -->
+  <div class="section-header">
+    <h2>Qui cherche un binôme ?</h2>
+    <span class="count-badge" id="totalCount">0</span>
+  </div>
+
+  <div class="filters-wrap" id="filtersWrap"></div>
+
+  <div id="listContainer"></div>
+
+</main>
+
+<footer>
+  Fait avec 🌊 pour la communauté Lunchtime ·
+  <a href="admin.html">Admin</a>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── CONFIG ──────────────────────────────────────────────────────────────
+  // À remplacer par ton vrai token GitHub et les infos de ton repo
+  const GITHUB_TOKEN  = 'TON_TOKEN_GITHUB_ICI';
+  const GITHUB_OWNER  = 'ton-username';
+  const GITHUB_REPO   = 'swimrun-binome';
+  const DATA_FILE     = 'data.json';
+  const COURSES_FILE  = 'courses.json';
+
+  // ── ÉTAT ────────────────────────────────────────────────────────────────
+  let inscrits  = [];
+  let courses   = [];
+  let filtreCourse = 'Tous';
+
+  // ── TOAST ───────────────────────────────────────────────────────────────
+  function showToast(msg, isError = false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (isError ? ' error' : '');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  // ── GITHUB API ──────────────────────────────────────────────────────────
+  async function ghGet(file) {
+    const r = await fetch(
+      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${file}`,
+      { headers: { Authorization: `token ${GITHUB_TOKEN}` } }
+    );
+    if (!r.ok) throw new Error('Lecture impossible');
+    const json = await r.json();
+    return { data: JSON.parse(atob(json.content)), sha: json.sha };
+  }
+
+  async function ghPut(file, data, sha, message) {
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+    const r = await fetch(
+      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${file}`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `token ${GITHUB_TOKEN}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message, content, sha })
+      }
+    );
+    if (!r.ok) throw new Error('Écriture impossible');
+  }
+
+  // ── CHARGEMENT ──────────────────────────────────────────────────────────
+  async function load() {
+    try {
+      const [c, d] = await Promise.all([ghGet(COURSES_FILE), ghGet(DATA_FILE)]);
+      courses  = c.data;
+      inscrits = d.data;
+    } catch {
+      // Mode démo local
+      try {
+        const [rc, rd] = await Promise.all([
+          fetch('courses.json').then(r => r.json()),
+          fetch('data.json').then(r => r.json())
+        ]);
+        courses  = rc;
+        inscrits = rd;
+      } catch { courses = []; inscrits = []; }
+    }
+    populateSelect();
+    renderFilters();
+    renderList();
+  }
+
+  function populateSelect() {
+    const sel = document.getElementById('course');
+    courses.forEach(c => {
+      const o = document.createElement('option');
+      o.value = o.textContent = c;
+      sel.appendChild(o);
+    });
+  }
+
+  // ── FILTRES ─────────────────────────────────────────────────────────────
+  function renderFilters() {
+    const wrap = document.getElementById('filtersWrap');
+    wrap.innerHTML = '';
+    const toutes = document.createElement('button');
+    toutes.className = 'filter-btn' + (filtreCourse === 'Tous' ? ' active' : '');
+    toutes.textContent = `Toutes les courses (${inscrits.length})`;
+    toutes.onclick = () => { filtreCourse = 'Tous'; renderFilters(); renderList(); };
+    wrap.appendChild(toutes);
+
+    courses.forEach(c => {
+      const nb = inscrits.filter(i => i.course === c).length;
+      if (!nb) return;
+      const short = c.split('—')[0].trim();
+      const btn = document.createElement('button');
+      btn.className = 'filter-btn' + (filtreCourse === c ? ' active' : '');
+      btn.textContent = `${short} (${nb})`;
+      btn.onclick = () => { filtreCourse = c; renderFilters(); renderList(); };
+      wrap.appendChild(btn);
+    });
+  }
+
+  // ── LISTE ───────────────────────────────────────────────────────────────
+  function renderList() {
+    const container = document.getElementById('listContainer');
+    document.getElementById('totalCount').textContent = inscrits.length;
+    container.innerHTML = '';
+
+    if (!inscrits.length) {
+      container.innerHTML = `<div class="empty-state"><span class="emoji">🌊</span>Sois le premier à t'inscrire !</div>`;
+      return;
+    }
+
+    const filtered = filtreCourse === 'Tous' ? inscrits : inscrits.filter(i => i.course === filtreCourse);
+    const byCourse = {};
+    filtered.forEach(i => {
+      if (!byCourse[i.course]) byCourse[i.course] = [];
+      byCourse[i.course].push(i);
+    });
+
+    Object.entries(byCourse).forEach(([course, members]) => {
+      const group = document.createElement('div');
+      group.className = 'race-group';
+      const label = document.createElement('div');
+      label.className = 'race-label';
+      label.innerHTML = `${course} <span class="race-count">${members.length} personne${members.length > 1 ? 's' : ''}</span>`;
+      group.appendChild(label);
+
+      members.forEach(m => {
+        group.appendChild(buildCard(m));
+      });
+
+      container.appendChild(group);
+    });
+  }
+
+  function buildCard(m) {
+    const card = document.createElement('div');
+    card.className = 'entry-card';
+    const dateStr = m.date ? new Date(m.date).toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' }) : '';
+
+    card.innerHTML = `
+      <div class="entry-top">
+        <span class="entry-name">${esc(m.prenom)} ${esc(m.nom)}</span>
+        <span class="entry-date">${dateStr}</span>
+      </div>
+      ${m.commentaire ? `<div class="entry-comment">« ${esc(m.commentaire)} »</div>` : ''}
+      <div class="contact-area">
+        <button class="btn-reveal" onclick="toggleReveal(this)">
+          🔒 Voir les coordonnées
+        </button>
+        <div class="reveal-form">
+          <p>Entre ton email pour accéder aux coordonnées.<br/>Tu dois être inscrit(e) pour voir celles des autres.</p>
+          <div class="reveal-input-row">
+            <input type="email" placeholder="ton@email.com" class="reveal-email-input" />
+            <button class="btn-check" onclick="checkEmail(this, '${esc(m.email)}', '${esc(m.telephone)}')">Vérifier</button>
+          </div>
+          <div class="reveal-error">❌ Cet email n'est pas dans la liste. Inscris-toi d'abord !</div>
+        </div>
+        <div class="contact-info">
+          ${m.email ? `<div><span class="ci-label">Email</span><br/><a href="mailto:${esc(m.email)}">${esc(m.email)}</a></div>` : ''}
+          ${m.telephone ? `<div><span class="ci-label">Téléphone</span><br/><a href="tel:${esc(m.telephone)}">${esc(m.telephone)}</a></div>` : ''}
+        </div>
+      </div>`;
+    return card;
+  }
+
+  function toggleReveal(btn) {
+    const area = btn.closest('.contact-area');
+    const form = area.querySelector('.reveal-form');
+    const isOpen = form.classList.contains('open');
+    form.classList.toggle('open', !isOpen);
+    btn.textContent = isOpen ? '🔒 Voir les coordonnées' : '✕ Annuler';
+    if (!isOpen) area.querySelector('.reveal-email-input').focus();
+  }
+
+  function checkEmail(btn, targetEmail, targetTel) {
+    const area = btn.closest('.contact-area');
+    const input = area.querySelector('.reveal-email-input');
+    const errDiv = area.querySelector('.reveal-error');
+    const contactDiv = area.querySelector('.contact-info');
+    const val = input.value.trim().toLowerCase();
+    const found = inscrits.some(i => i.email.toLowerCase() === val);
+
+    if (found) {
+      area.querySelector('.reveal-form').classList.remove('open');
+      area.querySelector('.btn-reveal').style.display = 'none';
+      contactDiv.classList.add('open');
+      errDiv.style.display = 'none';
+    } else {
+      errDiv.style.display = 'block';
+    }
+  }
+
+  // ── SOUMISSION ──────────────────────────────────────────────────────────
+  document.getElementById('inscriptionForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const form = e.target;
+
+    // honeypot
+    if (form.website && form.website.value) return;
+
+    const btn = document.getElementById('submitBtn');
+    const data = {
+      course: form.course.value,
+      nom: form.nom.value.trim(),
+      prenom: form.prenom.value.trim(),
+      email: form.email.value.trim().toLowerCase(),
+      telephone: form.telephone.value.trim(),
+      commentaire: form.commentaire.value.trim(),
+      date: new Date().toISOString().slice(0, 10),
+      id: Date.now().toString()
+    };
+
+    if (!data.course || !data.nom || !data.prenom || !data.email) {
+      showToast('⚠️ Merci de remplir les champs obligatoires.', true);
+      return;
+    }
+
+    // doublon email
+    if (inscrits.some(i => i.email === data.email)) {
+      showToast('📧 Cet email est déjà inscrit !', true);
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Envoi en cours…';
+
+    try {
+      const { data: current, sha } = await ghGet(DATA_FILE);
+      const updated = [...current, data];
+      await ghPut(DATA_FILE, updated, sha, `Nouvel inscrit : ${data.prenom} ${data.nom}`);
+      inscrits = updated;
+      form.reset();
+      showToast('🎉 Inscription enregistrée ! Bonne chance pour trouver ton binôme !');
+      renderFilters();
+      renderList();
+    } catch {
+      // En mode démo, on simule
+      inscrits.push(data);
+      form.reset();
+      showToast('🎉 (Mode démo) Inscription simulée !');
+      renderFilters();
+      renderList();
+    }
+
+    btn.disabled = false;
+    btn.textContent = '🙋 Je cherche un binôme !';
+  });
+
+  // ── UTIL ────────────────────────────────────────────────────────────────
+  function esc(s) {
+    return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  // ── INIT ────────────────────────────────────────────────────────────────
+  load();
+</script>
+</body>
+</html>
