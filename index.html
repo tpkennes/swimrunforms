@@ -569,8 +569,7 @@ async function ghGet(file) {
   }
   const json = await r.json();
   // Décodage UTF-8 robuste — atob() seul corrompt les accents
-  const b64 = json.content.replace(/[
-]/g, '');
+  const b64 = json.content.replace(/\s/g, '');
   const binStr = atob(b64);
   const bytes = new Uint8Array(binStr.length);
   for (let i = 0; i < binStr.length; i++) bytes[i] = binStr.charCodeAt(i);
