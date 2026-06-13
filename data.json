@@ -1,46 +1,46 @@
 [
   {
     "id": "1",
-    "course": "Swimrun des Calanques â 15 mars 2025",
+    "course": "",
     "nom": "Martin",
     "prenom": "Sophie",
     "email": "sophie.martin@email.com",
-    "telephone": "06 12 34 56 78",
-    "commentaire": "Niveau intermÃ©diaire, c'est ma 2Ã¨me saison. Je cherche quelqu'un de motivÃ© et sympa, pas forcÃ©ment ultra-compÃ©titif !",
+    "telephone": "06 12 34 56 80",
+    "commentaire": "Niveau intermÃÂ©diaire, c'est ma 2ÃÂ¨me saison. Je cherche quelqu'un de motivÃÂ© et sympa, pas forcÃÂ©ment ultra-compÃÂ©titif !",
     "date": "2025-01-10"
   },
   {
     "id": "2",
-    "course": "Swimrun des Calanques â 15 mars 2025",
+    "course": "Swimrun des Calanques Ã¢ÂÂ 15 mars 2025",
     "nom": "Dubois",
     "prenom": "Thomas",
     "email": "thomas.dubois@email.com",
     "telephone": "",
-    "commentaire": "Objectif TOP 10. Je cours Ã  4min/km et je nage correctement. Cherche binÃ´me sÃ©rieux et entraÃ®nÃ©.",
+    "commentaire": "Objectif TOP 10. Je cours ÃÂ  4min/km et je nage correctement. Cherche binÃÂ´me sÃÂ©rieux et entraÃÂ®nÃÂ©.",
     "date": "2025-01-12"
   },
   {
     "id": "3",
-    "course": "ÃTILLÃ Swimrun Cannes â 22 juin 2025",
+    "course": "ÃÂTILLÃÂ Swimrun Cannes Ã¢ÂÂ 22 juin 2025",
     "nom": "Leroy",
     "prenom": "Camille",
     "email": "camille.leroy@email.com",
     "telephone": "07 98 76 54 32",
-    "commentaire": "DÃ©butante en swimrun mais sportive depuis 10 ans (triathlon). J'y vais pour dÃ©couvrir et me faire plaisir !",
+    "commentaire": "DÃÂ©butante en swimrun mais sportive depuis 10 ans (triathlon). J'y vais pour dÃÂ©couvrir et me faire plaisir !",
     "date": "2025-01-15"
   },
   {
     "id": "4",
-    "course": "Swimrun du Lac d'Annecy â 5 juillet 2025",
+    "course": "Swimrun du Lac d'Annecy Ã¢ÂÂ 5 juillet 2025",
     "nom": "Bernard",
     "prenom": "Lucas",
     "email": "lucas.bernard@email.com",
     "telephone": "06 55 44 33 22",
-    "commentaire": "3Ã¨me saison. Niveau correct, ambiance avant tout. Fan de montagne et d'eau froide !",
+    "commentaire": "3ÃÂ¨me saison. Niveau correct, ambiance avant tout. Fan de montagne et d'eau froide !",
     "date": "2025-01-18"
   },
   {
-    "course": "ÃTILLÃ Swimrun Cannes â 22 juin 2025",
+    "course": "ÃÂTILLÃÂ Swimrun Cannes Ã¢ÂÂ 22 juin 2025",
     "nom": "test",
     "prenom": "test",
     "email": "test@email.com",
