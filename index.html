@@ -509,9 +509,9 @@
 <script>
   // ── CONFIG ──────────────────────────────────────────────────────────────
   // À remplacer par ton vrai token GitHub et les infos de ton repo
-  const GITHUB_TOKEN  = 'TON_TOKEN_GITHUB_ICI';
-  const GITHUB_OWNER  = 'ton-username';
-  const GITHUB_REPO   = 'swimrun-binome';
+  const GITHUB_TOKEN  = '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';
+  const GITHUB_OWNER  = 'tpkennes';
+  const GITHUB_REPO   = 'swimrunforms';
   const DATA_FILE     = 'data.json';
   const COURSES_FILE  = 'courses.json';
 
@@ -553,7 +553,12 @@
         body: JSON.stringify({ message, content, sha })
       }
     );
-    if (!r.ok) throw new Error('Écriture impossible');
+    if (!r.ok) {
+      const err = await r.json().catch(() => ({}));
+      throw new Error(`GitHub ${r.status}: ${err.message || 'Écriture impossible'}`);
+    }
+    const json = await r.json();
+    return json.content.sha; // ← retourne le nouveau SHA pour les prochaines écritures
   }
 
   // ── CHARGEMENT ──────────────────────────────────────────────────────────
@@ -562,7 +567,7 @@
       const [c, d] = await Promise.all([ghGet(COURSES_FILE), ghGet(DATA_FILE)]);
       courses  = c.data;
       inscrits = d.data;
-    } catch {
+    } catch(err) {
       // Mode démo local
       try {
         const [rc, rd] = await Promise.all([
@@ -571,7 +576,7 @@
         ]);
         courses  = rc;
         inscrits = rd;
-      } catch { courses = []; inscrits = []; }
+      } catch(err) { courses = []; inscrits = []; }
     }
     populateSelect();
     renderFilters();
@@ -744,13 +749,9 @@
       showToast('🎉 Inscription enregistrée ! Bonne chance pour trouver ton binôme !');
       renderFilters();
       renderList();
-    } catch {
-      // En mode démo, on simule
-      inscrits.push(data);
-      form.reset();
-      showToast('🎉 (Mode démo) Inscription simulée !');
-      renderFilters();
-      renderList();
+    } catch(err) {
+      console.error('Erreur GitHub:', err.message);
+      showToast('❌ Erreur : ' + err.message, true);
     }
 
     btn.disabled = false;
