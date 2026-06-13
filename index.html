@@ -151,7 +151,7 @@
       background: var(--white); table-layout: fixed;
     }
     .inscrits-table col.col-course  { width: 24%; }
-    .inscrits-table col.col-name    { width: 18%; }
+    .inscrits-table col.col-name    { width: 14%; }
     .inscrits-table col.col-comment { width: auto; }
     .inscrits-table col.col-action  { width: 100px; }
     .inscrits-table thead tr { background: var(--ocean); }
@@ -168,7 +168,7 @@
     .inscrits-table tbody tr:hover td { background: #f4fafd; }
 
     .td-course  { font-size: 12px; color: var(--muted); line-height: 1.4; }
-    .td-name    { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: var(--ocean); }
+    .td-name    { font-size: 13px; font-weight: 500; color: var(--ocean); white-space: nowrap; }
     .td-comment { font-size: 13px; color: #3D5A6A; line-height: 1.5; }
     .td-action  { vertical-align: middle; }
 
@@ -334,7 +334,7 @@
 <footer>
   Fait avec 🌊 pour la communauté swimrun ·
   <a href="admin.html">Admin</a>
-  · <span style="opacity:0.5;font-size:11px">v1.1</span>
+  · <span style="opacity:0.5;font-size:11px">v1.2</span>
 </footer>
 
 <div class="toast" id="toast"></div>
@@ -495,7 +495,7 @@
         (showCourse ? '<td class="td-course">' + esc(m.course) + '</td>' : '') +
         '<td class="td-name">' + esc(m.prenom) + ' ' + esc(m.nom) + '</td>' +
         '<td class="td-comment">' + (m.commentaire ? esc(m.commentaire) : '<span style="color:var(--muted)">—</span>') + '</td>' +
-        '<td class="td-action"><button class="btn-reveal" onclick="toggleReveal(\'' + panelId + '\', this)">🔒 Contacter</button></td>';
+        '<td class="td-action"><button class="btn-reveal" onclick="toggleReveal(\'' + panelId + '\', this)">Contact</button></td>';
       tbody.appendChild(tr);
 
       const panelTr = document.createElement('tr');
@@ -530,7 +530,7 @@
     document.querySelectorAll('.reveal-panel.open').forEach(function(p) {
       p.classList.remove('open');
       const prevBtn = p.previousElementSibling && p.previousElementSibling.querySelector('.btn-reveal');
-      if (prevBtn) prevBtn.textContent = '🔒 Contacter';
+      if (prevBtn) prevBtn.textContent = 'Contact';
     });
     if (!isOpen) {
       panel.classList.add('open');
