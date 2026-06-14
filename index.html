@@ -8,246 +8,186 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --ocean:  #0A2540;
-      --cyan:   #00B4D8;
-      --foam:   #90E0EF;
-      --bg:     #F0F7FA;
-      --coral:  #FF6B35;
-      --white:  #FFFFFF;
-      --text:   #1A2E3B;
-      --muted:  #6B8A99;
-      --border: #D0E8F0;
-      --card:   #FFFFFF;
-      --radius: 14px;
-      --shadow: 0 4px 24px rgba(10,37,64,0.10);
+      --ocean:  #0A2540; --cyan: #00B4D8; --foam: #90E0EF;
+      --bg:     #F0F7FA; --coral: #FF6B35; --white: #FFFFFF;
+      --text:   #1A2E3B; --muted: #6B8A99; --border: #D0E8F0;
+      --radius: 14px;    --shadow: 0 4px 24px rgba(10,37,64,0.10);
     }
-
-    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
 
     /* ── HERO ── */
     .hero {
       background: linear-gradient(135deg, var(--ocean) 0%, #0E3460 60%, #1565a8 100%);
-      color: var(--white);
-      padding: 48px 24px 0;
-      position: relative;
-      overflow: hidden;
+      color: var(--white); padding: 48px 24px 0; position: relative; overflow: hidden;
     }
-    .hero-inner { max-width: 720px; margin: 0 auto; position: relative; z-index: 2; }
+    .hero-inner { max-width:720px; margin:0 auto; position:relative; z-index:2; }
     .hero-badge {
-      display: inline-block;
-      background: rgba(0,180,216,0.18);
-      border: 1px solid rgba(0,180,216,0.4);
-      color: var(--foam);
-      font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-      padding: 5px 14px; border-radius: 20px; margin-bottom: 18px;
+      display:inline-block; background:rgba(0,180,216,0.18);
+      border:1px solid rgba(0,180,216,0.4); color:var(--foam);
+      font-size:12px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase;
+      padding:5px 14px; border-radius:20px; margin-bottom:18px;
     }
-    .hero h1 {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(32px, 7vw, 56px);
-      font-weight: 800; line-height: 1.05; margin-bottom: 20px;
+    .hero h1 { font-family:'Syne',sans-serif; font-size:clamp(32px,7vw,56px); font-weight:800; line-height:1.05; margin-bottom:20px; }
+    .hero h1 span { color:var(--cyan); }
+    .hero p { font-size:clamp(15px,2.5vw,17px); line-height:1.7; color:rgba(255,255,255,0.85); max-width:580px; margin-bottom:16px; }
+    .hero p em { font-style:normal; color:var(--foam); font-weight:600; }
+    .hero-link { display:inline-block; margin-bottom:20px; color:var(--foam); font-size:14px; font-weight:600; text-decoration:none; opacity:0.85; transition:opacity 0.2s; }
+    .hero-link:hover { opacity:1; text-decoration:underline; }
+
+    /* ── RÉCAP INSCRITS DANS LE HERO ── */
+    .hero-recap {
+      display:none;
+      margin-bottom:28px;
+      padding:12px 16px;
+      background:rgba(0,0,0,0.2);
+      border:1px solid rgba(255,255,255,0.12);
+      border-radius:10px;
+      font-size:13px;
+      color:rgba(255,255,255,0.85);
+      line-height:1.8;
     }
-    .hero h1 span { color: var(--cyan); }
-    .hero p {
-      font-size: clamp(15px, 2.5vw, 17px);
-      line-height: 1.7; color: rgba(255,255,255,0.85);
-      max-width: 580px; margin-bottom: 16px;
+    .hero-recap.visible { display:block; }
+    .hero-recap-title { font-weight:600; color:var(--foam); margin-bottom:6px; }
+    .hero-recap-pills { display:flex; flex-wrap:wrap; gap:6px; }
+    .recap-pill {
+      display:inline-block; background:rgba(0,180,216,0.2);
+      border:1px solid rgba(0,180,216,0.35); color:var(--foam);
+      font-size:12px; font-weight:600; padding:3px 10px; border-radius:12px;
+      text-decoration:none; transition:background 0.18s;
     }
-    .hero p em { font-style: normal; color: var(--foam); font-weight: 600; }
-    .hero-link {
-      display: inline-block;
-      margin-bottom: 32px;
-      color: var(--foam);
-      font-size: 14px; font-weight: 600;
-      text-decoration: none; opacity: 0.85; transition: opacity 0.2s;
-    }
-    .hero-link:hover { opacity: 1; text-decoration: underline; }
-    .wave-wrap { line-height: 0; margin-top: 0; }
-    .wave-wrap svg { width: 100%; display: block; }
+    .recap-pill:hover { background:rgba(0,180,216,0.4); }
+
+    .wave-wrap { line-height:0; }
+    .wave-wrap svg { width:100%; display:block; }
 
     /* ── LAYOUT ── */
-    .main { max-width: 780px; margin: 0 auto; padding: 40px 16px 80px; }
+    .main { max-width:780px; margin:0 auto; padding:40px 16px 80px; }
 
     /* ── CARD ── */
-    .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 32px; margin-bottom: 32px; }
-    @media (max-width: 480px) { .card { padding: 20px 16px; } }
-    .card-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; color: var(--ocean); margin-bottom: 6px; }
-    .card-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+    .card { background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); padding:32px; margin-bottom:32px; }
+    @media (max-width:480px) { .card { padding:20px 16px; } }
+    .card-title { font-family:'Syne',sans-serif; font-size:20px; font-weight:700; color:var(--ocean); margin-bottom:6px; }
+    .card-sub { font-size:13px; color:var(--muted); margin-bottom:24px; }
 
     /* ── FORM ── */
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    @media (max-width: 520px) { .form-grid { grid-template-columns: 1fr; } }
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
-    .form-group.full { grid-column: 1 / -1; }
-    label { font-size: 13px; font-weight: 600; color: var(--ocean); letter-spacing: 0.02em; }
-    label .req { color: var(--coral); margin-left: 2px; }
-    label .opt { color: var(--muted); font-weight: 400; font-size: 12px; margin-left: 4px; }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    @media (max-width:520px) { .form-grid { grid-template-columns:1fr; } }
+    .form-group { display:flex; flex-direction:column; gap:6px; }
+    .form-group.full { grid-column:1 / -1; }
+    label { font-size:13px; font-weight:600; color:var(--ocean); letter-spacing:0.02em; }
+    label .req { color:var(--coral); margin-left:2px; }
+    label .opt { color:var(--muted); font-weight:400; font-size:12px; margin-left:4px; }
     input, select, textarea {
-      font-family: 'Inter', sans-serif; font-size: 15px;
-      padding: 11px 14px; border: 1.5px solid var(--border); border-radius: 8px;
-      background: var(--bg); color: var(--text);
-      transition: border-color 0.2s, box-shadow 0.2s; width: 100%;
+      font-family:'Inter',sans-serif; font-size:15px; padding:11px 14px;
+      border:1.5px solid var(--border); border-radius:8px;
+      background:var(--bg); color:var(--text);
+      transition:border-color 0.2s, box-shadow 0.2s; width:100%;
     }
-    input:focus, select:focus, textarea:focus {
-      outline: none; border-color: var(--cyan);
-      box-shadow: 0 0 0 3px rgba(0,180,216,0.15);
-    }
-    textarea { resize: vertical; min-height: 90px; }
-    select {
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B8A99' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px;
-    }
-    .hint { font-size: 12px; color: var(--muted); line-height: 1.5; }
-    .hp { display: none !important; }
+    input:focus, select:focus, textarea:focus { outline:none; border-color:var(--cyan); box-shadow:0 0 0 3px rgba(0,180,216,0.15); }
+    textarea { resize:vertical; min-height:90px; }
+    select { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B8A99' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:36px; }
+    .hint { font-size:12px; color:var(--muted); line-height:1.5; }
+    .hp { display:none !important; }
 
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-      font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700;
-      padding: 14px 28px; border-radius: 10px; border: none; cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
-    }
-    .btn:active { transform: scale(0.97); }
-    .btn-primary {
-      background: var(--coral); color: var(--white);
-      box-shadow: 0 4px 16px rgba(255,107,53,0.30);
-      width: 100%; margin-top: 8px;
-    }
-    .btn-primary:hover { box-shadow: 0 6px 24px rgba(255,107,53,0.40); transform: translateY(-1px); }
-    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; font-family:'Syne',sans-serif; font-size:16px; font-weight:700; padding:14px 28px; border-radius:10px; border:none; cursor:pointer; transition:transform 0.15s, box-shadow 0.15s, opacity 0.15s; }
+    .btn:active { transform:scale(0.97); }
+    .btn-primary { background:var(--coral); color:var(--white); box-shadow:0 4px 16px rgba(255,107,53,0.30); width:100%; margin-top:8px; }
+    .btn-primary:hover { box-shadow:0 6px 24px rgba(255,107,53,0.40); transform:translateY(-1px); }
+    .btn-primary:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
 
     /* ── TOAST ── */
-    .toast {
-      position: fixed; bottom: 24px; left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: var(--ocean); color: var(--white);
-      padding: 14px 24px; border-radius: 10px; font-size: 15px; font-weight: 500;
-      box-shadow: 0 8px 32px rgba(10,37,64,0.25);
-      transition: transform 0.3s ease; z-index: 100; white-space: nowrap;
-    }
-    .toast.show { transform: translateX(-50%) translateY(0); }
-    .toast.error { background: #c0392b; }
+    .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--ocean); color:var(--white); padding:14px 24px; border-radius:10px; font-size:15px; font-weight:500; box-shadow:0 8px 32px rgba(10,37,64,0.25); transition:transform 0.3s ease; z-index:100; white-space:nowrap; }
+    .toast.show { transform:translateX(-50%) translateY(0); }
+    .toast.error { background:#c0392b; }
 
     /* ── FILTRES ── */
-    .filters-wrap { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
-    .filter-btn {
-      font-size: 13px; font-weight: 600; padding: 7px 14px;
-      border-radius: 20px; border: 1.5px solid var(--border);
-      background: var(--white); color: var(--muted); cursor: pointer; transition: all 0.18s;
-    }
-    .filter-btn:hover { border-color: var(--cyan); color: var(--ocean); }
-    .filter-btn.active { background: var(--ocean); border-color: var(--ocean); color: var(--white); }
+    .filters-wrap { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
+    .filter-btn { font-size:13px; font-weight:600; padding:7px 14px; border-radius:20px; border:1.5px solid var(--border); background:var(--white); color:var(--muted); cursor:pointer; transition:all 0.18s; }
+    .filter-btn:hover { border-color:var(--cyan); color:var(--ocean); }
+    .filter-btn.active { background:var(--ocean); border-color:var(--ocean); color:var(--white); }
 
     /* ── SECTION TITRE ── */
-    .section-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 16px; }
-    .section-header h2 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; color: var(--ocean); }
-    .count-badge { background: var(--cyan); color: var(--white); font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 12px; }
+    .section-header { display:flex; align-items:baseline; gap:10px; margin-bottom:16px; }
+    .section-header h2 { font-family:'Syne',sans-serif; font-size:22px; font-weight:700; color:var(--ocean); }
+    .count-badge { background:var(--cyan); color:var(--white); font-size:12px; font-weight:700; padding:3px 10px; border-radius:12px; }
+
+    /* ── SKELETON LOADER ── */
+    .skeleton-wrap { background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; }
+    .skeleton-row { display:flex; gap:16px; padding:14px 16px; border-bottom:1px solid var(--border); align-items:center; }
+    .skeleton-row:last-child { border-bottom:none; }
+    .skel {
+      background: linear-gradient(90deg, #e8f0f5 25%, #d0e4ed 50%, #e8f0f5 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius:6px; height:14px;
+    }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    .skel-sm  { width:15%; }
+    .skel-md  { width:22%; }
+    .skel-lg  { width:40%; }
+    .skel-btn { width:10%; height:28px; border-radius:6px; }
 
     /* ── TABLEAU INSCRITS ── */
-    .table-wrap { border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
-    .inscrits-table {
-      width: 100%; border-collapse: collapse; font-size: 14px;
-      background: var(--white); table-layout: fixed;
-    }
-    .inscrits-table col.col-course  { width: 24%; }
-    .inscrits-table col.col-name    { width: 14%; }
-    .inscrits-table col.col-comment { width: auto; }
-    .inscrits-table col.col-action  { width: 100px; }
-    .inscrits-table thead tr { background: var(--ocean); }
-    .inscrits-table th {
-      font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700;
-      letter-spacing: 0.06em; text-transform: uppercase;
-      color: var(--foam); padding: 12px 14px; text-align: left;
-    }
-    .inscrits-table td {
-      padding: 12px 14px; border-bottom: 1px solid var(--border);
-      vertical-align: top; color: var(--text); overflow: hidden; word-break: break-word;
-    }
-    .inscrits-table tbody tr:last-child td { border-bottom: none; }
-    .inscrits-table tbody tr:hover td { background: #f4fafd; }
+    .table-wrap { border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; }
+    .inscrits-table { width:100%; border-collapse:collapse; font-size:14px; background:var(--white); table-layout:fixed; }
+    .inscrits-table col.col-course  { width:24%; }
+    .inscrits-table col.col-name    { width:14%; }
+    .inscrits-table col.col-comment { width:auto; }
+    .inscrits-table col.col-action  { width:90px; }
+    .inscrits-table thead tr { background:var(--ocean); }
+    .inscrits-table th { font-family:'Syne',sans-serif; font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--foam); padding:12px 14px; text-align:left; }
+    .inscrits-table td { padding:12px 14px; border-bottom:1px solid var(--border); vertical-align:top; color:var(--text); overflow:hidden; word-break:break-word; }
+    .inscrits-table tbody tr:last-child td { border-bottom:none; }
+    .inscrits-table tbody tr:hover td { background:#f4fafd; }
+    .td-course  { font-size:12px; color:var(--muted); line-height:1.4; }
+    .td-name    { font-size:13px; font-weight:500; color:var(--ocean); }
+    .td-comment { font-size:13px; color:#3D5A6A; line-height:1.5; }
+    .td-action  { vertical-align:middle; }
+    .btn-reveal { font-family:'Inter',sans-serif; font-size:12px; font-weight:600; padding:6px 8px; border-radius:6px; border:1.5px solid var(--cyan); background:transparent; color:var(--cyan); cursor:pointer; transition:all 0.18s; white-space:nowrap; width:100%; text-align:center; }
+    .btn-reveal:hover { background:var(--cyan); color:var(--white); }
 
-    .td-course  { font-size: 12px; color: var(--muted); line-height: 1.4; }
-    .td-name    { font-size: 13px; font-weight: 500; color: var(--ocean); white-space: nowrap; }
-    .td-comment { font-size: 13px; color: #3D5A6A; line-height: 1.5; }
-    .td-action  { vertical-align: middle; }
+    .reveal-panel { display:none; }
+    .reveal-panel.open { display:table-row; }
+    .reveal-inner { padding:14px 16px; background:#f8fcfe; border-top:1px solid var(--border); }
+    .reveal-inner p { font-size:13px; color:var(--muted); margin-bottom:10px; }
+    .reveal-input-row { display:flex; gap:8px; flex-wrap:wrap; }
+    .reveal-input-row input { flex:1; min-width:160px; font-size:14px; padding:8px 12px; border:1.5px solid var(--border); border-radius:7px; font-family:'Inter',sans-serif; background:var(--white); }
+    .reveal-input-row input:focus { outline:none; border-color:var(--cyan); }
+    .btn-check { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; padding:8px 14px; border-radius:7px; border:none; background:var(--ocean); color:var(--white); cursor:pointer; white-space:nowrap; transition:opacity 0.15s; }
+    .btn-check:hover { opacity:0.85; }
+    .contact-info { display:none; margin-top:10px; background:#E8F8FB; border:1.5px solid var(--foam); border-radius:8px; padding:10px 14px; font-size:14px; gap:16px; flex-wrap:wrap; }
+    .contact-info.open { display:flex; }
+    .contact-info a { color:var(--ocean); font-weight:600; text-decoration:none; }
+    .contact-info a:hover { text-decoration:underline; }
+    .contact-info .ci-label { color:var(--muted); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; display:block; margin-bottom:2px; }
+    .reveal-error { font-size:13px; color:#c0392b; margin-top:8px; display:none; }
 
-    .btn-reveal {
-      font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600;
-      padding: 6px 8px; border-radius: 6px; border: 1.5px solid var(--cyan);
-      background: transparent; color: var(--cyan); cursor: pointer;
-      transition: all 0.18s; white-space: nowrap; width: 100%; text-align: center;
-    }
-    .btn-reveal:hover { background: var(--cyan); color: var(--white); }
-
-    /* panneau reveal sous la ligne */
-    .reveal-panel { display: none; }
-    .reveal-panel.open { display: table-row; }
-    .reveal-inner { padding: 14px 16px; background: #f8fcfe; border-top: 1px solid var(--border); }
-    .reveal-inner p { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
-    .reveal-input-row { display: flex; gap: 8px; flex-wrap: wrap; }
-    .reveal-input-row input {
-      flex: 1; min-width: 160px; font-size: 14px; padding: 8px 12px;
-      border: 1.5px solid var(--border); border-radius: 7px;
-      font-family: 'Inter', sans-serif; background: var(--white);
-    }
-    .reveal-input-row input:focus { outline: none; border-color: var(--cyan); }
-    .btn-check {
-      font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
-      padding: 8px 14px; border-radius: 7px; border: none;
-      background: var(--ocean); color: var(--white);
-      cursor: pointer; white-space: nowrap; transition: opacity 0.15s;
-    }
-    .btn-check:hover { opacity: 0.85; }
-    .contact-info {
-      display: none; margin-top: 10px; background: #E8F8FB;
-      border: 1.5px solid var(--foam); border-radius: 8px;
-      padding: 10px 14px; font-size: 14px; gap: 16px; flex-wrap: wrap;
-    }
-    .contact-info.open { display: flex; }
-    .contact-info a { color: var(--ocean); font-weight: 600; text-decoration: none; }
-    .contact-info a:hover { text-decoration: underline; }
-    .contact-info .ci-label {
-      color: var(--muted); font-size: 11px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.07em; display: block; margin-bottom: 2px;
-    }
-    .reveal-error { font-size: 13px; color: #c0392b; margin-top: 8px; display: none; }
-
-    /* Mobile — cartes empilées */
-    @media (max-width: 580px) {
-      .table-wrap { box-shadow: none; border-radius: 0; overflow: visible; }
+    @media (max-width:580px) {
+      .table-wrap { box-shadow:none; border-radius:0; overflow:visible; }
       .inscrits-table, .inscrits-table thead, .inscrits-table tbody,
-      .inscrits-table th, .inscrits-table td, .inscrits-table tr { display: block; }
-      .inscrits-table thead { display: none; }
-      .inscrits-table tbody tr {
-        background: var(--white); border-radius: 10px;
-        box-shadow: var(--shadow); margin-bottom: 12px;
-        padding: 14px; border: 1.5px solid var(--border);
-      }
-      .inscrits-table td { padding: 3px 0; border: none; overflow: visible; }
-      .td-name { font-size: 16px; margin-bottom: 2px; }
-      .td-course { margin-bottom: 4px; }
-      .td-comment { margin-bottom: 10px; }
-      .btn-reveal { width: auto; }
-      .reveal-panel { display: none !important; }
-      .reveal-panel.open { display: block !important; }
-      .reveal-panel td { padding: 0; border: none; }
+      .inscrits-table th, .inscrits-table td, .inscrits-table tr { display:block; }
+      .inscrits-table thead { display:none; }
+      .inscrits-table tbody tr { background:var(--white); border-radius:10px; box-shadow:var(--shadow); margin-bottom:12px; padding:14px; border:1.5px solid var(--border); }
+      .inscrits-table td { padding:3px 0; border:none; overflow:visible; }
+      .btn-reveal { width:auto; }
+      .reveal-panel { display:none !important; }
+      .reveal-panel.open { display:block !important; }
+      .reveal-panel td { padding:0; border:none; }
     }
 
-    .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 15px; }
-    .empty-state .emoji { font-size: 36px; display: block; margin-bottom: 10px; }
+    .empty-state { text-align:center; padding:40px 20px; color:var(--muted); font-size:15px; }
+    .empty-state .emoji { font-size:36px; display:block; margin-bottom:10px; }
 
-    /* ── FOOTER ── */
-    footer { text-align: center; padding: 24px; font-size: 13px; color: var(--muted); }
-    footer a { color: var(--cyan); text-decoration: none; }
+    footer { text-align:center; padding:24px; font-size:13px; color:var(--muted); }
+    footer a { color:var(--cyan); text-decoration:none; }
   </style>
 </head>
 <body>
 
-<!-- ── HERO ── -->
 <header class="hero">
   <div class="hero-inner">
-    <span class="hero-badge">🏊 Swimrun · Saison 2026</span>
+    <span class="hero-badge" id="heroBadge">🏊 …</span>
     <h1>Trouve ton<br/><span>Binôme</span></h1>
     <p>
       Le swimrun ça se fait à deux… encore faut-il trouver l'autre !
@@ -256,6 +196,12 @@
       <em>On ne joue pas les entremetteur·ses</em> — on te donne juste l'outil 😄
     </p>
     <a href="#inscrits" class="hero-link">👇 Voir qui cherche un·e binôme</a>
+
+    <!-- Récap inscrits — visible seulement si inscrits > 0 -->
+    <div class="hero-recap" id="heroRecap">
+      <div class="hero-recap-title" id="heroRecapTitle"></div>
+      <div class="hero-recap-pills" id="heroRecapPills"></div>
+    </div>
   </div>
   <div class="wave-wrap">
     <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -264,19 +210,15 @@
   </div>
 </header>
 
-<!-- ── MAIN ── -->
 <main class="main">
 
-  <!-- FORMULAIRE -->
   <div class="card" id="form-card">
     <div class="card-title">Je m'inscris</div>
     <div class="card-sub">Tous les champs marqués * sont obligatoires</div>
-
     <form id="inscriptionForm" novalidate>
       <div class="hp" aria-hidden="true">
         <input type="text" name="website" tabindex="-1" autocomplete="off" />
       </div>
-
       <div class="form-grid">
         <div class="form-group full">
           <label for="course">Course <span class="req">*</span></label>
@@ -284,27 +226,22 @@
             <option value="">— Sélectionne ta course —</option>
           </select>
         </div>
-
         <div class="form-group">
           <label for="nom">Nom <span class="req">*</span></label>
           <input type="text" id="nom" name="nom" placeholder="Dupont" required autocomplete="family-name" />
         </div>
-
         <div class="form-group">
           <label for="prenom">Prénom <span class="req">*</span></label>
           <input type="text" id="prenom" name="prenom" placeholder="Jean" required autocomplete="given-name" />
         </div>
-
         <div class="form-group">
           <label for="email">Email <span class="req">*</span></label>
           <input type="email" id="email" name="email" placeholder="jean@email.com" required autocomplete="email" />
         </div>
-
         <div class="form-group">
           <label for="telephone">Téléphone <span class="opt">(optionnel)</span></label>
           <input type="tel" id="telephone" name="telephone" placeholder="87 12 34 56" autocomplete="tel" />
         </div>
-
         <div class="form-group full">
           <label for="commentaire">Commentaire <span class="opt">(optionnel)</span></label>
           <span class="hint">Ex : Niveau débutant, j'y vais pour le fun 🎉</span>
@@ -312,20 +249,25 @@
           <textarea id="commentaire" name="commentaire" placeholder="Dis-nous ton niveau, tes objectifs, ce que tu attends de ton·ta futur·e binôme…"></textarea>
         </div>
       </div>
-
       <button type="submit" class="btn btn-primary" id="submitBtn">
         🙋 Je cherche un·e binôme !
       </button>
     </form>
   </div>
 
-  <!-- LISTE DES INSCRITS -->
   <div class="section-header" id="inscrits">
     <h2>Qui cherche un·e binôme ?</h2>
-    <span class="count-badge" id="totalCount">0</span>
+    <span class="count-badge" id="totalCount">⋯</span>
   </div>
 
   <div class="filters-wrap" id="filtersWrap"></div>
+
+  <!-- Skeleton affiché pendant le chargement -->
+  <div class="skeleton-wrap" id="skeletonLoader">
+    <div class="skeleton-row"><div class="skel skel-md"></div><div class="skel skel-sm"></div><div class="skel skel-lg"></div><div class="skel skel-btn"></div></div>
+    <div class="skeleton-row"><div class="skel skel-md"></div><div class="skel skel-sm"></div><div class="skel skel-lg"></div><div class="skel skel-btn"></div></div>
+    <div class="skeleton-row"><div class="skel skel-md"></div><div class="skel skel-sm"></div><div class="skel skel-lg"></div><div class="skel skel-btn"></div></div>
+  </div>
 
   <div id="listContainer"></div>
 
@@ -334,118 +276,145 @@
 <footer>
   Fait avec 🌊 pour la communauté swimrun ·
   <a href="admin.html">Admin</a>
-  · <span style="opacity:0.5;font-size:11px">v1.3</span>
+  · <span style="opacity:0.5;font-size:11px">v1.4</span>
 </footer>
 
 <div class="toast" id="toast"></div>
 
 <script>
-  // ── CONFIG ──────────────────────────────────────────────────────────────
   const WORKER_URL   = 'https://swimrun.tpkennes.workers.dev';
   const GITHUB_OWNER = 'tpkennes';
   const GITHUB_REPO  = 'swimrunforms';
   const DATA_FILE    = 'data.json';
   const COURSES_FILE = 'courses.json';
+  const CONFIG_FILE  = 'config.json';
 
-  // ── ÉTAT ────────────────────────────────────────────────────────────────
-  let inscrits     = [];
-  let courses      = [];
-  let filtreCourse = 'Tous';
+  var inscrits     = [];
+  var courses      = [];
+  var filtreCourse = 'Tous';
 
-  // ── TOAST ───────────────────────────────────────────────────────────────
-  function showToast(msg, isError = false) {
-    const t = document.getElementById('toast');
+  function showToast(msg, isError) {
+    var t = document.getElementById('toast');
     t.textContent = msg;
     t.className = 'toast' + (isError ? ' error' : '');
     t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3500);
+    setTimeout(function() { t.classList.remove('show'); }, 3500);
   }
 
   // ── GITHUB API ──────────────────────────────────────────────────────────
   async function ghGet(file) {
-    const githubUrl = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/contents/' + file;
-    const r = await fetch(WORKER_URL + '?url=' + encodeURIComponent(githubUrl));
+    var githubUrl = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/contents/' + file;
+    var r = await fetch(WORKER_URL + '?url=' + encodeURIComponent(githubUrl));
     if (!r.ok) {
-      const err = await r.json().catch(() => ({}));
+      var err = await r.json().catch(function() { return {}; });
       throw new Error('GitHub ' + r.status + ': ' + (err.message || 'Lecture impossible'));
     }
-    const json = await r.json();
-    // Décodage UTF-8 robuste — atob() seul corrompt les accents
-    const b64 = json.content.replace(/\r/g, '').replace(/\n/g, '');
-    const binStr = atob(b64);
-    const bytes = new Uint8Array(binStr.length);
-    for (let i = 0; i < binStr.length; i++) {
-      bytes[i] = binStr.charCodeAt(i);
-    }
-    const decoded = new TextDecoder('utf-8').decode(bytes);
+    var json = await r.json();
+    var b64 = json.content.replace(/\r/g, '').replace(/\n/g, '');
+    var binStr = atob(b64);
+    var bytes = new Uint8Array(binStr.length);
+    for (var i = 0; i < binStr.length; i++) { bytes[i] = binStr.charCodeAt(i); }
+    var decoded = new TextDecoder('utf-8').decode(bytes);
     return { data: JSON.parse(decoded), sha: json.sha };
   }
 
   async function ghPut(file, data, msg) {
-    const sha = (await ghGet(file)).sha;
-    // Encodage UTF-8 propre via TextEncoder
-    const jsonStr = JSON.stringify(data, null, 2);
-    const encoder = new TextEncoder();
-    const bytes_out = encoder.encode(jsonStr);
-    let binary = '';
-    bytes_out.forEach(function(b) { binary += String.fromCharCode(b); });
-    const content = btoa(binary);
-    const githubUrl = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/contents/' + file;
-    const r = await fetch(WORKER_URL + '?url=' + encodeURIComponent(githubUrl), {
+    var freshSha = (await ghGet(file)).sha;
+    var jsonStr  = JSON.stringify(data, null, 2);
+    var encoder  = new TextEncoder();
+    var bytesOut = encoder.encode(jsonStr);
+    var binary   = '';
+    bytesOut.forEach(function(b) { binary += String.fromCharCode(b); });
+    var content = btoa(binary);
+    var githubUrl = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/contents/' + file;
+    var r = await fetch(WORKER_URL + '?url=' + encodeURIComponent(githubUrl), {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: msg, content: content, sha: sha })
+      body: JSON.stringify({ message: msg, content: content, sha: freshSha })
     });
     if (!r.ok) {
-      const err = await r.json().catch(() => ({}));
-      throw new Error('GitHub ' + r.status + ': ' + (err.message || 'Écriture impossible'));
+      var err = await r.json().catch(function() { return {}; });
+      throw new Error('GitHub ' + r.status + ': ' + (err.message || 'Ecriture impossible'));
     }
-    const json = await r.json();
-    return json.content.sha;
+    return (await r.json()).content.sha;
   }
 
   // ── CHARGEMENT ──────────────────────────────────────────────────────────
   async function load() {
     try {
-      const [c, d] = await Promise.all([ghGet(COURSES_FILE), ghGet(DATA_FILE)]);
-      courses  = c.data;
-      inscrits = d.data;
+      var results = await Promise.all([ghGet(COURSES_FILE), ghGet(DATA_FILE), ghGet(CONFIG_FILE)]);
+      courses  = results[0].data;
+      inscrits = results[1].data;
+      var cfg  = results[2].data;
+      document.getElementById('heroBadge').textContent = '🏊 ' + (cfg.saison || 'Swimrun');
     } catch(err) {
       console.error('Erreur chargement:', err.message);
       showToast('❌ Erreur chargement : ' + err.message, true);
       courses = []; inscrits = [];
     }
+    document.getElementById('skeletonLoader').style.display = 'none';
     populateSelect();
+    renderRecap();
     renderFilters();
     renderList();
   }
 
   function populateSelect() {
-    const sel = document.getElementById('course');
+    var sel = document.getElementById('course');
     while (sel.options.length > 1) sel.remove(1);
     courses.forEach(function(c) {
-      const o = document.createElement('option');
+      var o = document.createElement('option');
       o.value = c; o.textContent = c;
       sel.appendChild(o);
     });
   }
 
+  // ── RÉCAP HERO ──────────────────────────────────────────────────────────
+  function renderRecap() {
+    var recap = document.getElementById('heroRecap');
+    if (!inscrits.length) { recap.classList.remove('visible'); return; }
+
+    var byCourse = {};
+    courses.forEach(function(c) { byCourse[c] = 0; });
+    inscrits.forEach(function(i) { if (byCourse[i.course] !== undefined) byCourse[i.course]++; });
+
+    document.getElementById('heroRecapTitle').textContent =
+      '🏊 ' + inscrits.length + ' personne' + (inscrits.length > 1 ? 's cherchent' : ' cherche') + ' un·e binôme';
+
+    var pillsEl = document.getElementById('heroRecapPills');
+    pillsEl.innerHTML = '';
+    courses.forEach(function(c) {
+      var nb = byCourse[c] || 0;
+      if (!nb) return;
+      var short = c.split('—')[0].trim();
+      var a = document.createElement('a');
+      a.href = '#inscrits';
+      a.className = 'recap-pill';
+      a.textContent = short + ' (' + nb + ')';
+      a.onclick = function() { filtreCourse = c; renderFilters(); renderList(); };
+      pillsEl.appendChild(a);
+    });
+
+    recap.classList.add('visible');
+  }
+
   // ── FILTRES ─────────────────────────────────────────────────────────────
   function renderFilters() {
-    const wrap = document.getElementById('filtersWrap');
+    var wrap = document.getElementById('filtersWrap');
     wrap.innerHTML = '';
+    if (!inscrits.length) return;
 
-    const btnTous = document.createElement('button');
+    var btnTous = document.createElement('button');
     btnTous.className = 'filter-btn' + (filtreCourse === 'Tous' ? ' active' : '');
     btnTous.textContent = 'Toutes (' + inscrits.length + ')';
     btnTous.onclick = function() { filtreCourse = 'Tous'; renderFilters(); renderList(); };
     wrap.appendChild(btnTous);
 
     courses.forEach(function(c) {
-      const nb = inscrits.filter(function(i) { return i.course === c; }).length;
+      var nb = inscrits.filter(function(i) { return i.course === c; }).length;
       if (!nb) return;
-      const short = c.split('—')[0].trim();
-      const btn = document.createElement('button');
+      var short = c.split('—')[0].trim();
+      var btn = document.createElement('button');
       btn.className = 'filter-btn' + (filtreCourse === c ? ' active' : '');
       btn.textContent = short + ' (' + nb + ')';
       btn.onclick = function() { filtreCourse = c; renderFilters(); renderList(); };
@@ -453,13 +422,13 @@
     });
   }
 
-  // ── LISTE (tableau) ──────────────────────────────────────────────────────
+  // ── LISTE ───────────────────────────────────────────────────────────────
   function renderList() {
-    const container = document.getElementById('listContainer');
+    var container = document.getElementById('listContainer');
     document.getElementById('totalCount').textContent = inscrits.length;
     container.innerHTML = '';
 
-    const filtered = filtreCourse === 'Tous'
+    var filtered = filtreCourse === 'Tous'
       ? inscrits
       : inscrits.filter(function(i) { return i.course === filtreCourse; });
 
@@ -468,14 +437,14 @@
       return;
     }
 
-    const wrap = document.createElement('div');
+    var wrap  = document.createElement('div');
     wrap.className = 'table-wrap';
 
-    const table = document.createElement('table');
+    var table = document.createElement('table');
     table.className = 'inscrits-table';
 
-    const showCourse = (filtreCourse === 'Tous');
-    const colspan    = showCourse ? 4 : 3;
+    var showCourse = (filtreCourse === 'Tous');
+    var colspan    = showCourse ? 4 : 3;
 
     table.innerHTML =
       '<colgroup>' +
@@ -491,12 +460,12 @@
         '<th>Contact</th>' +
       '</tr></thead>';
 
-    const tbody = document.createElement('tbody');
+    var tbody = document.createElement('tbody');
 
     filtered.forEach(function(m, idx) {
-      const panelId = 'panel-' + idx;
+      var panelId = 'panel-' + idx;
 
-      const tr = document.createElement('tr');
+      var tr = document.createElement('tr');
       tr.innerHTML =
         (showCourse ? '<td class="td-course">' + esc(m.course) + '</td>' : '') +
         '<td class="td-name">' + esc(m.prenom) + '<br>' + esc(m.nom) + '</td>' +
@@ -504,7 +473,7 @@
         '<td class="td-action"><button class="btn-reveal" onclick="toggleReveal(\'' + panelId + '\', this)">Contact</button></td>';
       tbody.appendChild(tr);
 
-      const panelTr = document.createElement('tr');
+      var panelTr = document.createElement('tr');
       panelTr.className = 'reveal-panel';
       panelTr.id = panelId;
       panelTr.innerHTML =
@@ -517,7 +486,7 @@
             '</div>' +
             '<div class="reveal-error">❌ Cet email n\'est pas dans la liste. Inscris-toi d\'abord !</div>' +
             '<div class="contact-info">' +
-              (m.email ? '<div><span class="ci-label">Email</span><a href="mailto:' + esc(m.email) + '">' + esc(m.email) + '</a></div>' : '') +
+              (m.email    ? '<div><span class="ci-label">Email</span><a href="mailto:' + esc(m.email) + '">' + esc(m.email) + '</a></div>' : '') +
               (m.telephone ? '<div><span class="ci-label">Téléphone</span><a href="tel:' + esc(m.telephone) + '">' + esc(m.telephone) + '</a></div>' : '') +
             '</div>' +
           '</div>' +
@@ -531,11 +500,11 @@
   }
 
   function toggleReveal(panelId, btn) {
-    const panel  = document.getElementById(panelId);
-    const isOpen = panel.classList.contains('open');
+    var panel  = document.getElementById(panelId);
+    var isOpen = panel.classList.contains('open');
     document.querySelectorAll('.reveal-panel.open').forEach(function(p) {
       p.classList.remove('open');
-      const prevBtn = p.previousElementSibling && p.previousElementSibling.querySelector('.btn-reveal');
+      var prevBtn = p.previousElementSibling && p.previousElementSibling.querySelector('.btn-reveal');
       if (prevBtn) prevBtn.textContent = 'Contact';
     });
     if (!isOpen) {
@@ -546,18 +515,18 @@
   }
 
   function checkEmail(btn, targetEmail, targetTel) {
-    const inner      = btn.closest('.reveal-inner');
-    const input      = inner.querySelector('.reveal-email-input');
-    const errDiv     = inner.querySelector('.reveal-error');
-    const contactDiv = inner.querySelector('.contact-info');
-    const val        = input.value.trim().toLowerCase();
-    const found      = inscrits.some(function(i) { return i.email.toLowerCase() === val; });
+    var inner      = btn.closest('.reveal-inner');
+    var input      = inner.querySelector('.reveal-email-input');
+    var errDiv     = inner.querySelector('.reveal-error');
+    var contactDiv = inner.querySelector('.contact-info');
+    var val        = input.value.trim().toLowerCase();
+    var found      = inscrits.some(function(i) { return i.email.toLowerCase() === val; });
     if (found) {
-      inner.querySelector('p').style.display = 'none';
-      input.style.display = 'none';
-      btn.style.display   = 'none';
+      inner.querySelector('p').style.display  = 'none';
+      input.style.display      = 'none';
+      btn.style.display        = 'none';
       contactDiv.classList.add('open');
-      errDiv.style.display = 'none';
+      errDiv.style.display     = 'none';
     } else {
       errDiv.style.display = 'block';
     }
@@ -566,11 +535,11 @@
   // ── SOUMISSION ──────────────────────────────────────────────────────────
   document.getElementById('inscriptionForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-    const form = e.target;
+    var form = e.target;
     if (form.website && form.website.value) return;
 
-    const btn  = document.getElementById('submitBtn');
-    const data = {
+    var btn  = document.getElementById('submitBtn');
+    var data = {
       course:      form.course.value,
       nom:         form.nom.value.trim(),
       prenom:      form.prenom.value.trim(),
@@ -582,41 +551,36 @@
     };
 
     if (!data.course || !data.nom || !data.prenom || !data.email) {
-      showToast('⚠️ Merci de remplir les champs obligatoires.', true);
-      return;
+      showToast('⚠️ Merci de remplir les champs obligatoires.', true); return;
     }
     if (inscrits.some(function(i) { return i.email === data.email; })) {
-      showToast('📧 Cet email est déjà inscrit !', true);
-      return;
+      showToast('📧 Cet email est déjà inscrit !', true); return;
     }
 
-    btn.disabled    = true;
-    btn.textContent = 'Envoi en cours…';
+    btn.disabled = true; btn.textContent = 'Envoi en cours…';
 
     try {
-      const current = (await ghGet(DATA_FILE)).data;
-      const updated = current.concat([data]);
+      var current = (await ghGet(DATA_FILE)).data;
+      var updated = current.concat([data]);
       await ghPut(DATA_FILE, updated, 'Nouvel inscrit : ' + data.prenom + ' ' + data.nom);
       inscrits = updated;
       form.reset();
       showToast('🎉 Inscription enregistrée ! Bonne chance pour trouver ton·ta binôme !');
+      renderRecap();
       renderFilters();
       renderList();
     } catch(err) {
-      console.error('Erreur GitHub:', err.message);
+      console.error('Erreur:', err.message);
       showToast('❌ Erreur : ' + err.message, true);
     }
 
-    btn.disabled    = false;
-    btn.textContent = '🙋 Je cherche un·e binôme !';
+    btn.disabled = false; btn.textContent = '🙋 Je cherche un·e binôme !';
   });
 
-  // ── UTIL ────────────────────────────────────────────────────────────────
   function esc(s) {
     return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
   }
 
-  // ── INIT ────────────────────────────────────────────────────────────────
   load();
 </script>
 </body>
