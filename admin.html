@@ -43,6 +43,7 @@
     .btn-danger  { background:var(--danger); color:var(--white); }
     .btn-ghost   { background:transparent; border:1.5px solid var(--border); color:var(--muted); }
     .btn-ghost:hover { border-color:var(--cyan); color:var(--ocean); }
+    .btn:disabled { opacity:0.5; cursor:not-allowed; }
     .new-course-row { display:flex; gap:10px; margin-top:14px; }
     .new-course-row input { flex:1; padding:9px 12px; border:1.5px solid var(--border); border-radius:8px; font-family:'Inter',sans-serif; font-size:14px; background:var(--bg); }
     .new-course-row input:focus { outline:none; border-color:var(--cyan); }
@@ -68,24 +69,29 @@
     .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--ocean); color:var(--white); padding:14px 24px; border-radius:10px; font-size:15px; font-weight:500; box-shadow:0 8px 32px rgba(10,37,64,0.25); transition:transform 0.3s ease; z-index:300; white-space:nowrap; }
     .toast.show { transform:translateX(-50%) translateY(0); }
     .toast.error { background:var(--danger); }
+    .token-badge { display:inline-block; font-size:11px; padding:3px 8px; border-radius:8px; margin-left:12px; font-weight:600; }
+    .token-badge.ok  { background:#d4edda; color:#155724; }
+    .token-badge.exp { background:#f8d7da; color:#721c24; }
     @media (max-width:480px) { .admin-main { padding:20px 12px 60px; } .card { padding:16px; } }
   </style>
 </head>
 <body>
 
+<!-- ── LOGIN ── -->
 <div class="login-wrap" id="loginWrap">
   <div class="login-card">
     <h1>🔐 Administration</h1>
     <p>Accès réservé à l'admin du site Swimrun Binôme</p>
-    <div class="login-error" id="loginError">Mot de passe incorrect.</div>
+    <div class="login-error" id="loginError"></div>
     <input type="password" id="pwdInput" placeholder="Mot de passe" />
-    <button class="btn btn-ocean" style="width:100%" onclick="checkPwd()">Connexion</button>
+    <button class="btn btn-ocean" style="width:100%" id="loginBtn" onclick="doLogin()">Connexion</button>
   </div>
 </div>
 
+<!-- ── ADMIN ── -->
 <div id="adminWrap" style="display:none">
   <div class="admin-header">
-    <h1>🏊 Admin — Swimrun Binôme</h1>
+    <h1>🏊 Admin — Swimrun Binôme <span class="token-badge ok" id="tokenBadge">Session active</span></h1>
     <div style="display:flex;gap:16px;align-items:center">
       <a href="index.html">← Voir le site</a>
       <button class="btn btn-ghost btn-sm" onclick="logout()" style="color:#fff;border-color:rgba(255,255,255,0.3)">Déconnexion</button>
@@ -98,7 +104,7 @@
     <!-- CONFIG SAISON -->
     <div class="card">
       <div class="section-title">⚙️ Configuration</div>
-      <label style="font-size:13px;font-weight:600;color:var(--ocean);display:block;margin-bottom:8px">Titre de la saison (affiché dans le header du site)</label>
+      <label style="font-size:13px;font-weight:600;color:var(--ocean);display:block;margin-bottom:8px">Titre de la saison</label>
       <div class="config-row">
         <input type="text" id="saisonInput" placeholder="Ex : Swimrun · Saison 2026" />
         <button class="btn btn-ocean btn-sm" onclick="saveSaison()">💾 Sauvegarder</button>
@@ -131,6 +137,7 @@
   </div>
 </div>
 
+<!-- ── MODAL EDIT ── -->
 <div class="modal-overlay" id="editModal">
   <div class="modal">
     <h2>✏️ Modifier l'inscription</h2>
@@ -151,93 +158,161 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  var ADMIN_PASSWORD = 'swimrun2025';
-  var WORKER_URL     = 'https://swimrun.tpkennes.workers.dev';
-  var GITHUB_OWNER   = 'tpkennes';
-  var GITHUB_REPO    = 'swimrunforms';
-  var DATA_FILE      = 'data.json';
-  var COURSES_FILE   = 'courses.json';
-  var CONFIG_FILE    = 'config.json';
+  var WORKER_URL   = 'https://swimrun.tpkennes.workers.dev';
+  var GITHUB_OWNER = 'tpkennes';
+  var GITHUB_REPO  = 'swimrunforms';
+  var DATA_FILE    = 'data.json';
+  var COURSES_FILE = 'courses.json';
+  var CONFIG_FILE  = 'config.json';
 
   var inscrits = [];
   var courses  = [];
-  var config   = { saison: 'Swimrun · Saison 2026' };
+  var config   = { saison: '' };
 
-  function checkPwd() {
-    if (document.getElementById('pwdInput').value === ADMIN_PASSWORD) {
-      sessionStorage.setItem('admin_ok', '1');
-      document.getElementById('loginWrap').style.display = 'none';
-      document.getElementById('adminWrap').style.display = 'block';
-      load();
+  // ── TOKEN ────────────────────────────────────────────────────────────────
+  // Stocké en sessionStorage — disparaît à la fermeture de l'onglet
+  function getToken()          { return sessionStorage.getItem('admin_token'); }
+  function setToken(t)         { sessionStorage.setItem('admin_token', t); }
+  function clearToken()        { sessionStorage.removeItem('admin_token'); }
+
+  function tokenExpiry() {
+    var t = getToken();
+    if (!t) return 0;
+    return parseInt(t.split('.')[0]) || 0;
+  }
+
+  function isTokenValid() {
+    return getToken() && Date.now() < tokenExpiry();
+  }
+
+  function updateTokenBadge() {
+    var badge = document.getElementById('tokenBadge');
+    if (!badge) return;
+    var remaining = Math.round((tokenExpiry() - Date.now()) / 60000);
+    if (remaining > 0) {
+      badge.className = 'token-badge ok';
+      badge.textContent = 'Session active — expire dans ' + remaining + ' min';
     } else {
-      document.getElementById('loginError').style.display = 'block';
+      badge.className = 'token-badge exp';
+      badge.textContent = 'Session expirée';
     }
   }
-  document.getElementById('pwdInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') checkPwd(); });
-  function logout() { sessionStorage.removeItem('admin_ok'); location.reload(); }
-  if (sessionStorage.getItem('admin_ok')) {
-    document.getElementById('loginWrap').style.display = 'none';
-    document.getElementById('adminWrap').style.display = 'block';
+
+  // ── AUTH ─────────────────────────────────────────────────────────────────
+  async function doLogin() {
+    var pwd = document.getElementById('pwdInput').value;
+    var btn = document.getElementById('loginBtn');
+    var err = document.getElementById('loginError');
+    err.style.display = 'none';
+    btn.disabled = true;
+    btn.textContent = 'Connexion…';
+
+    try {
+      var r = await fetch(WORKER_URL + '/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pwd })
+      });
+      var data = await r.json();
+      if (!r.ok) throw new Error(data.error || 'Erreur');
+      setToken(data.token);
+      document.getElementById('loginWrap').style.display = 'none';
+      document.getElementById('adminWrap').style.display = 'block';
+      updateTokenBadge();
+      setInterval(updateTokenBadge, 60000);
+      load();
+    } catch(e) {
+      err.textContent = '❌ ' + e.message;
+      err.style.display = 'block';
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Connexion';
   }
 
-  function showToast(msg, err) {
+  document.getElementById('pwdInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  function logout() {
+    clearToken();
+    location.reload();
+  }
+
+  // Vérifier si session existante au chargement
+  if (isTokenValid()) {
+    document.getElementById('loginWrap').style.display = 'none';
+    document.getElementById('adminWrap').style.display = 'block';
+    updateTokenBadge();
+    setInterval(updateTokenBadge, 60000);
+  }
+
+  // ── TOAST ────────────────────────────────────────────────────────────────
+  function showToast(msg, isErr) {
     var t = document.getElementById('toast');
     t.textContent = msg;
-    t.className = 'toast' + (err ? ' error' : '');
+    t.className = 'toast' + (isErr ? ' error' : '');
     t.classList.add('show');
     setTimeout(function() { t.classList.remove('show'); }, 3500);
   }
 
-  // ── GITHUB API ──────────────────────────────────────────────────────────
+  // ── GITHUB API ───────────────────────────────────────────────────────────
   async function ghGet(file) {
     var githubUrl = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/contents/' + file;
     var r = await fetch(WORKER_URL + '?url=' + encodeURIComponent(githubUrl));
     if (!r.ok) {
-      var err = await r.json().catch(function() { return {}; });
-      throw new Error('GitHub ' + r.status + ': ' + (err.message || 'Lecture impossible'));
+      var e = await r.json().catch(function() { return {}; });
+      throw new Error('GitHub ' + r.status + ': ' + (e.message || 'Lecture impossible'));
     }
     var json = await r.json();
     var b64 = json.content.replace(/\r/g, '').replace(/\n/g, '');
     var binStr = atob(b64);
     var bytes = new Uint8Array(binStr.length);
     for (var i = 0; i < binStr.length; i++) { bytes[i] = binStr.charCodeAt(i); }
-    var decoded = new TextDecoder('utf-8').decode(bytes);
-    return { data: JSON.parse(decoded), sha: json.sha };
+    return { data: JSON.parse(new TextDecoder('utf-8').decode(bytes)), sha: json.sha };
   }
 
   async function ghPut(file, data, msg) {
+    if (!isTokenValid()) {
+      showToast('⏱️ Session expirée, reconnecte-toi.', true);
+      setTimeout(function() { logout(); }, 2000);
+      throw new Error('Session expirée');
+    }
     var freshSha = (await ghGet(file)).sha;
     var jsonStr  = JSON.stringify(data, null, 2);
-    var encoder  = new TextEncoder();
-    var bytesOut = encoder.encode(jsonStr);
+    var enc      = new TextEncoder();
+    var bytesOut = enc.encode(jsonStr);
     var binary   = '';
     bytesOut.forEach(function(b) { binary += String.fromCharCode(b); });
     var content = btoa(binary);
+
     var githubUrl = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/contents/' + file;
     var r = await fetch(WORKER_URL + '?url=' + encodeURIComponent(githubUrl), {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type':  'application/json',
+        'X-Admin-Token': getToken()          // ← token au lieu du mot de passe
+      },
       body: JSON.stringify({ message: msg, content: content, sha: freshSha })
     });
     if (!r.ok) {
-      var err = await r.json().catch(function() { return {}; });
-      throw new Error('GitHub ' + r.status + ': ' + (err.message || 'Ecriture impossible'));
+      var e = await r.json().catch(function() { return {}; });
+      throw new Error('GitHub ' + r.status + ': ' + (e.error || e.message || 'Ecriture impossible'));
     }
     return (await r.json()).content.sha;
   }
 
-  // ── CHARGEMENT ──────────────────────────────────────────────────────────
+  // ── CHARGEMENT ───────────────────────────────────────────────────────────
   async function load() {
-    if (!sessionStorage.getItem('admin_ok')) return;
+    if (!isTokenValid()) return;
     try {
       var results = await Promise.all([ghGet(COURSES_FILE), ghGet(DATA_FILE), ghGet(CONFIG_FILE)]);
       courses  = results[0].data;
       inscrits = results[1].data;
       config   = results[2].data;
       document.getElementById('saisonInput').value = config.saison || '';
-    } catch(err) {
-      console.error('Erreur chargement:', err.message);
-      showToast('❌ Erreur : ' + err.message, true);
+    } catch(e) {
+      showToast('❌ Erreur chargement : ' + e.message, true);
       courses = []; inscrits = [];
     }
     renderStats();
@@ -245,20 +320,18 @@
     renderTable();
   }
 
-  // ── CONFIG SAISON ────────────────────────────────────────────────────────
+  // ── CONFIG SAISON ─────────────────────────────────────────────────────────
   async function saveSaison() {
     var val = document.getElementById('saisonInput').value.trim();
     if (!val) { showToast('⚠️ Le titre ne peut pas être vide.', true); return; }
     config.saison = val;
     try {
-      await ghPut(CONFIG_FILE, config, 'Mise a jour saison : ' + val);
-      showToast('✅ Titre de saison mis à jour !');
-    } catch(err) {
-      showToast('❌ Erreur : ' + err.message, true);
-    }
+      await ghPut(CONFIG_FILE, config, 'Mise a jour saison');
+      showToast('✅ Titre mis à jour !');
+    } catch(e) { showToast('❌ Erreur : ' + e.message, true); }
   }
 
-  // ── STATS ───────────────────────────────────────────────────────────────
+  // ── STATS ─────────────────────────────────────────────────────────────────
   function renderStats() {
     var el = document.getElementById('statsRow');
     var byCourse = {};
@@ -271,14 +344,12 @@
     el.innerHTML = html;
   }
 
-  // ── COURSES ─────────────────────────────────────────────────────────────
+  // ── COURSES ───────────────────────────────────────────────────────────────
   function renderCourses() {
-    var el = document.getElementById('coursesList');
-    el.innerHTML = courses.map(function(c, i) {
+    document.getElementById('coursesList').innerHTML = courses.map(function(c, i) {
       return '<div class="course-item">' +
         '<input type="text" value="' + esc(c) + '" onchange="courses[' + i + ']=this.value" />' +
-        '<button class="btn btn-danger btn-sm" onclick="deleteCourse(' + i + ')">🗑</button>' +
-        '</div>';
+        '<button class="btn btn-danger btn-sm" onclick="deleteCourse(' + i + ')">🗑</button></div>';
     }).join('');
     updateEditSelect();
   }
@@ -298,28 +369,28 @@
     try {
       await ghPut(COURSES_FILE, courses, 'Suppression course');
       showToast('🗑️ Course supprimée');
-    } catch(err) { showToast('❌ Erreur : ' + err.message, true); }
+    } catch(e) { showToast('❌ Erreur : ' + e.message, true); }
   }
 
   async function saveCourses() {
     try {
-      await ghPut(COURSES_FILE, courses, 'Mise a jour des courses');
+      await ghPut(COURSES_FILE, courses, 'Mise a jour courses');
       showToast('✅ Courses sauvegardées !');
-    } catch(err) { showToast('❌ Erreur : ' + err.message, true); }
+    } catch(e) { showToast('❌ Erreur : ' + e.message, true); }
   }
 
-  // ── TABLE INSCRITS ──────────────────────────────────────────────────────
+  // ── TABLE INSCRITS ────────────────────────────────────────────────────────
   function renderTable() {
     document.getElementById('inscritCount').textContent = '— ' + inscrits.length + ' inscrit' + (inscrits.length > 1 ? 's' : '');
     var tbody = document.getElementById('inscritBody');
     if (!inscrits.length) {
-      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:32px">Aucun inscrit pour le moment</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:32px">Aucun inscrit</td></tr>';
       return;
     }
     tbody.innerHTML = inscrits.map(function(m, i) {
       return '<tr>' +
         '<td style="white-space:nowrap">' + (m.date || '—') + '</td>' +
-        '<td style="white-space:nowrap"><strong>' + esc(m.prenom) + ' ' + esc(m.nom) + '</strong></td>' +
+        '<td><strong>' + esc(m.prenom) + ' ' + esc(m.nom) + '</strong></td>' +
         '<td style="font-size:13px">' + esc(m.course) + '</td>' +
         '<td><a href="mailto:' + esc(m.email) + '" style="color:var(--cyan)">' + esc(m.email) + '</a></td>' +
         '<td>' + (esc(m.telephone) || '—') + '</td>' +
@@ -337,17 +408,16 @@
     inscrits.splice(i, 1);
     try {
       await ghPut(DATA_FILE, inscrits, 'Suppression : ' + m.prenom + ' ' + m.nom);
-      showToast('🗑️ Inscription supprimée');
-    } catch(err) {
+      showToast('🗑️ Supprimé');
+    } catch(e) {
       inscrits.splice(i, 0, m);
-      showToast('❌ Erreur : ' + err.message, true);
+      showToast('❌ Erreur : ' + e.message, true);
     }
     renderStats(); renderTable();
   }
 
   function updateEditSelect() {
-    var sel = document.getElementById('editCourse');
-    sel.innerHTML = courses.map(function(c) {
+    document.getElementById('editCourse').innerHTML = courses.map(function(c) {
       return '<option value="' + esc(c) + '">' + esc(c) + '</option>';
     }).join('');
   }
@@ -380,11 +450,11 @@
     try {
       var m = inscrits[i];
       await ghPut(DATA_FILE, inscrits, 'Modification : ' + m.prenom + ' ' + m.nom);
-      showToast('✅ Inscription mise à jour');
+      showToast('✅ Mis à jour');
       closeModal();
-    } catch(err) {
+    } catch(e) {
       inscrits[i] = backup;
-      showToast('❌ Erreur : ' + err.message, true);
+      showToast('❌ Erreur : ' + e.message, true);
     }
     renderStats(); renderTable();
   }
@@ -393,7 +463,7 @@
     return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
   }
 
-  if (sessionStorage.getItem('admin_ok')) load();
+  if (isTokenValid()) load();
 </script>
 </body>
 </html>
