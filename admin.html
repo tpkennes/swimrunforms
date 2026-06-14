@@ -17,76 +17,30 @@
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
     /* LOGIN */
-    .login-wrap {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
-    .login-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 40px;
-      width: 100%;
-      max-width: 380px;
-      text-align: center;
-    }
+    .login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+    .login-card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); padding: 40px; width: 100%; max-width: 380px; text-align: center; }
     .login-card h1 { font-family:'Syne',sans-serif; font-size:24px; color:var(--ocean); margin-bottom:8px; }
     .login-card p { color:var(--muted); font-size:14px; margin-bottom:24px; }
-    .login-card input {
-      width:100%; padding:12px 14px; border:1.5px solid var(--border);
-      border-radius:8px; font-size:15px; font-family:'Inter',sans-serif;
-      margin-bottom:12px; background:var(--bg);
-    }
+    .login-card input { width:100%; padding:12px 14px; border:1.5px solid var(--border); border-radius:8px; font-size:15px; font-family:'Inter',sans-serif; margin-bottom:12px; background:var(--bg); }
     .login-card input:focus { outline:none; border-color:var(--cyan); }
     .login-error { color:var(--danger); font-size:13px; margin-bottom:10px; display:none; }
 
     /* ADMIN */
-    .admin-header {
-      background: var(--ocean);
-      color: var(--white);
-      padding: 20px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
+    .admin-header { background:var(--ocean); color:var(--white); padding:20px 24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
     .admin-header h1 { font-family:'Syne',sans-serif; font-size:20px; }
     .admin-header a { color:var(--foam); font-size:13px; text-decoration:none; }
-
     .admin-main { max-width:900px; margin:0 auto; padding:32px 16px 80px; }
 
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 12px;
-      margin-bottom: 28px;
-    }
-    .stat-card {
-      background:var(--white); border-radius:10px; padding:16px;
-      text-align:center; box-shadow:var(--shadow);
-    }
+    .stats-row { display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:12px; margin-bottom:28px; }
+    .stat-card { background:var(--white); border-radius:10px; padding:16px; text-align:center; box-shadow:var(--shadow); }
     .stat-card .num { font-family:'Syne',sans-serif; font-size:28px; font-weight:800; color:var(--ocean); }
     .stat-card .lbl { font-size:12px; color:var(--muted); margin-top:4px; }
 
-    /* COURSES EDITOR */
-    .section-title {
-      font-family:'Syne',sans-serif; font-size:18px; font-weight:700;
-      color:var(--ocean); margin-bottom:14px;
-      display:flex; align-items:center; gap:10px;
-    }
+    .section-title { font-family:'Syne',sans-serif; font-size:18px; font-weight:700; color:var(--ocean); margin-bottom:14px; }
     .card { background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow); padding:24px; margin-bottom:24px; }
 
-    .course-item {
-      display:flex; align-items:center; gap:10px;
-      padding:10px 0;
-      border-bottom:1px solid var(--border);
-    }
+    .course-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--border); }
     .course-item:last-child { border-bottom:none; }
-    .course-item span { flex:1; font-size:14px; }
     .course-item input { flex:1; font-size:14px; padding:6px 10px; border:1.5px solid var(--cyan); border-radius:6px; font-family:'Inter',sans-serif; }
 
     .btn { display:inline-flex; align-items:center; gap:6px; font-family:'Syne',sans-serif; font-size:14px; font-weight:700; padding:9px 16px; border-radius:8px; border:none; cursor:pointer; transition:opacity 0.15s; }
@@ -102,7 +56,6 @@
     .new-course-row input { flex:1; padding:9px 12px; border:1.5px solid var(--border); border-radius:8px; font-family:'Inter',sans-serif; font-size:14px; background:var(--bg); }
     .new-course-row input:focus { outline:none; border-color:var(--cyan); }
 
-    /* TABLE */
     .table-wrap { overflow-x:auto; }
     table { width:100%; border-collapse:collapse; font-size:14px; }
     th { background:var(--ocean); color:var(--white); font-family:'Syne',sans-serif; font-size:13px; font-weight:700; padding:12px 14px; text-align:left; white-space:nowrap; }
@@ -110,25 +63,14 @@
     tr:hover td { background:#F8FCFE; }
     .td-comment { font-style:italic; color:var(--muted); max-width:200px; font-size:13px; }
 
-    /* EDIT MODAL */
-    .modal-overlay {
-      display:none; position:fixed; inset:0;
-      background:rgba(10,37,64,0.5); z-index:200;
-      align-items:center; justify-content:center; padding:16px;
-    }
+    /* MODAL */
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(10,37,64,0.5); z-index:200; align-items:center; justify-content:center; padding:16px; }
     .modal-overlay.open { display:flex; }
-    .modal {
-      background:var(--white); border-radius:var(--radius);
-      padding:28px; width:100%; max-width:480px;
-      box-shadow:0 8px 40px rgba(10,37,64,0.25);
-    }
+    .modal { background:var(--white); border-radius:var(--radius); padding:28px; width:100%; max-width:480px; box-shadow:0 8px 40px rgba(10,37,64,0.25); }
     .modal h2 { font-family:'Syne',sans-serif; font-size:20px; color:var(--ocean); margin-bottom:20px; }
     .modal .form-group { display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
     .modal label { font-size:13px; font-weight:600; color:var(--ocean); }
-    .modal input, .modal select, .modal textarea {
-      font-family:'Inter',sans-serif; font-size:14px; padding:10px 12px;
-      border:1.5px solid var(--border); border-radius:8px; background:var(--bg);
-    }
+    .modal input, .modal select, .modal textarea { font-family:'Inter',sans-serif; font-size:14px; padding:10px 12px; border:1.5px solid var(--border); border-radius:8px; background:var(--bg); }
     .modal input:focus, .modal textarea:focus { outline:none; border-color:var(--cyan); }
     .modal textarea { min-height:80px; resize:vertical; }
     .modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:6px; }
@@ -138,15 +80,11 @@
     .toast.show { transform:translateX(-50%) translateY(0); }
     .toast.error { background:var(--danger); }
 
-    @media (max-width:480px) {
-      .admin-main { padding:20px 12px 60px; }
-      .card { padding:16px; }
-    }
+    @media (max-width:480px) { .admin-main { padding:20px 12px 60px; } .card { padding:16px; } }
   </style>
 </head>
 <body>
 
-<!-- ── LOGIN ── -->
 <div class="login-wrap" id="loginWrap">
   <div class="login-card">
     <h1>🔐 Administration</h1>
@@ -157,9 +95,7 @@
   </div>
 </div>
 
-<!-- ── ADMIN INTERFACE ── -->
 <div id="adminWrap" style="display:none">
-
   <div class="admin-header">
     <h1>🏊 Admin — Swimrun Binôme</h1>
     <div style="display:flex;gap:16px;align-items:center">
@@ -169,11 +105,8 @@
   </div>
 
   <div class="admin-main">
-
-    <!-- STATS -->
     <div class="stats-row" id="statsRow"></div>
 
-    <!-- COURSES -->
     <div class="card">
       <div class="section-title">📋 Courses de la saison</div>
       <div id="coursesList"></div>
@@ -186,59 +119,32 @@
       </div>
     </div>
 
-    <!-- INSCRITS -->
     <div class="card">
       <div class="section-title">👥 Inscrits <span style="font-size:14px;font-weight:400;color:var(--muted)" id="inscritCount"></span></div>
       <div class="table-wrap">
-        <table id="inscritTable">
+        <table>
           <thead>
             <tr>
-              <th>Date</th>
-              <th>Nom</th>
-              <th>Course</th>
-              <th>Email</th>
-              <th>Téléphone</th>
-              <th>Commentaire</th>
-              <th>Actions</th>
+              <th>Date</th><th>Nom</th><th>Course</th><th>Email</th><th>Téléphone</th><th>Commentaire</th><th>Actions</th>
             </tr>
           </thead>
           <tbody id="inscritBody"></tbody>
         </table>
       </div>
     </div>
-
   </div>
 </div>
 
-<!-- ── MODAL EDIT ── -->
 <div class="modal-overlay" id="editModal">
   <div class="modal">
     <h2>✏️ Modifier l'inscription</h2>
     <input type="hidden" id="editId" />
-    <div class="form-group">
-      <label>Course</label>
-      <select id="editCourse"></select>
-    </div>
-    <div class="form-group">
-      <label>Nom</label>
-      <input type="text" id="editNom" />
-    </div>
-    <div class="form-group">
-      <label>Prénom</label>
-      <input type="text" id="editPrenom" />
-    </div>
-    <div class="form-group">
-      <label>Email</label>
-      <input type="email" id="editEmail" />
-    </div>
-    <div class="form-group">
-      <label>Téléphone</label>
-      <input type="tel" id="editTelephone" />
-    </div>
-    <div class="form-group">
-      <label>Commentaire</label>
-      <textarea id="editCommentaire"></textarea>
-    </div>
+    <div class="form-group"><label>Course</label><select id="editCourse"></select></div>
+    <div class="form-group"><label>Nom</label><input type="text" id="editNom" /></div>
+    <div class="form-group"><label>Prénom</label><input type="text" id="editPrenom" /></div>
+    <div class="form-group"><label>Email</label><input type="email" id="editEmail" /></div>
+    <div class="form-group"><label>Téléphone</label><input type="tel" id="editTelephone" /></div>
+    <div class="form-group"><label>Commentaire</label><textarea id="editCommentaire"></textarea></div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal()">Annuler</button>
       <button class="btn btn-ocean" onclick="saveEdit()">💾 Enregistrer</button>
@@ -249,21 +155,19 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  // ── CONFIG ──────────────────────────────────────────────────────────────
-  const ADMIN_PASSWORD = 'swimrun2025'; // ← Change ce mot de passe !
-const WORKER_URL = 'https://swimrun.tpkennes.workers.dev';
-const GITHUB_OWNER = 'tpkennes';
-const GITHUB_REPO  = 'swimrunforms';
-const DATA_FILE    = 'data.json';
-const COURSES_FILE = 'courses.json';
+  const ADMIN_PASSWORD = 'swimrun2025';
+  const WORKER_URL     = 'https://swimrun.tpkennes.workers.dev';
+  const GITHUB_OWNER   = 'tpkennes';
+  const GITHUB_REPO    = 'swimrunforms';
+  const DATA_FILE      = 'data.json';
+  const COURSES_FILE   = 'courses.json';
 
   let inscrits = [];
   let courses  = [];
 
   // ── AUTH ────────────────────────────────────────────────────────────────
   function checkPwd() {
-    const v = document.getElementById('pwdInput').value;
-    if (v === ADMIN_PASSWORD) {
+    if (document.getElementById('pwdInput').value === ADMIN_PASSWORD) {
       sessionStorage.setItem('admin_ok', '1');
       document.getElementById('loginWrap').style.display = 'none';
       document.getElementById('adminWrap').style.display = 'block';
@@ -272,7 +176,7 @@ const COURSES_FILE = 'courses.json';
       document.getElementById('loginError').style.display = 'block';
     }
   }
-  document.getElementById('pwdInput').addEventListener('keydown', e => { if (e.key === 'Enter') checkPwd(); });
+  document.getElementById('pwdInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') checkPwd(); });
   function logout() { sessionStorage.removeItem('admin_ok'); location.reload(); }
   if (sessionStorage.getItem('admin_ok')) {
     document.getElementById('loginWrap').style.display = 'none';
@@ -280,54 +184,65 @@ const COURSES_FILE = 'courses.json';
   }
 
   // ── TOAST ───────────────────────────────────────────────────────────────
-  function showToast(msg, err = false) {
-    const t = document.getElementById('toast');
+  function showToast(msg, err) {
+    var t = document.getElementById('toast');
     t.textContent = msg;
     t.className = 'toast' + (err ? ' error' : '');
     t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3500);
+    setTimeout(function() { t.classList.remove('show'); }, 3500);
   }
 
   // ── GITHUB API ──────────────────────────────────────────────────────────
-async function ghGet(file) {
-  const githubUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${file}`;
-  const r = await fetch(`${WORKER_URL}?url=${encodeURIComponent(githubUrl)}`);
-  if (!r.ok) {
-    const err = await r.json().catch(() => ({}));
-    throw new Error(`GitHub ${r.status}: ${err.message || 'Lecture impossible'}`);
+  async function ghGet(file) {
+    var githubUrl = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/contents/' + file;
+    var r = await fetch(WORKER_URL + '?url=' + encodeURIComponent(githubUrl));
+    if (!r.ok) {
+      var err = await r.json().catch(function() { return {}; });
+      throw new Error('GitHub ' + r.status + ': ' + (err.message || 'Lecture impossible'));
+    }
+    var json = await r.json();
+    // Décodage UTF-8 robuste
+    var b64 = json.content.replace(/\r/g, '').replace(/\n/g, '');
+    var binStr = atob(b64);
+    var bytes = new Uint8Array(binStr.length);
+    for (var i = 0; i < binStr.length; i++) { bytes[i] = binStr.charCodeAt(i); }
+    var decoded = new TextDecoder('utf-8').decode(bytes);
+    return { data: JSON.parse(decoded), sha: json.sha };
   }
-  const json = await r.json();
-  return { data: JSON.parse(atob(json.content)), sha: json.sha };
-}
 
-  // Relit toujours le SHA frais avant d'ecrire pour eviter les conflits
-async function ghPut(file, data, msg) {
-  const { sha } = await ghGet(file);
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
-  const githubUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${file}`;
-  const r = await fetch(`${WORKER_URL}?url=${encodeURIComponent(githubUrl)}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message: msg, content, sha })
-  });
-  if (!r.ok) {
-    const err = await r.json().catch(() => ({}));
-    throw new Error(`GitHub ${r.status}: ${err.message || 'Écriture impossible'}`);
+  async function ghPut(file, data, msg) {
+    var freshSha = (await ghGet(file)).sha;
+    // Encodage UTF-8 propre via TextEncoder
+    var jsonStr = JSON.stringify(data, null, 2);
+    var encoder = new TextEncoder();
+    var bytesOut = encoder.encode(jsonStr);
+    var binary = '';
+    bytesOut.forEach(function(b) { binary += String.fromCharCode(b); });
+    var content = btoa(binary);
+
+    var githubUrl = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/contents/' + file;
+    var r = await fetch(WORKER_URL + '?url=' + encodeURIComponent(githubUrl), {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: msg, content: content, sha: freshSha })
+    });
+    if (!r.ok) {
+      var err = await r.json().catch(function() { return {}; });
+      throw new Error('GitHub ' + r.status + ': ' + (err.message || 'Ecriture impossible'));
+    }
+    return (await r.json()).content.sha;
   }
-  const json = await r.json();
-  return json.content.sha;
-}
 
   // ── CHARGEMENT ──────────────────────────────────────────────────────────
   async function load() {
     if (!sessionStorage.getItem('admin_ok')) return;
     try {
-      const [c, d] = await Promise.all([ghGet(COURSES_FILE), ghGet(DATA_FILE)]);
-      courses = c.data; coursesShaSaved = c.sha;
-      inscrits = d.data; dataShaSaved = d.sha;
+      var results = await Promise.all([ghGet(COURSES_FILE), ghGet(DATA_FILE)]);
+      courses  = results[0].data;
+      inscrits = results[1].data;
     } catch(err) {
       console.error('Erreur chargement:', err.message);
-      showToast('❌ Impossible de charger les données : ' + err.message, true);
+      showToast('❌ Erreur : ' + err.message, true);
       courses = []; inscrits = [];
     }
     renderStats();
@@ -337,33 +252,30 @@ async function ghPut(file, data, msg) {
 
   // ── STATS ───────────────────────────────────────────────────────────────
   function renderStats() {
-    const el = document.getElementById('statsRow');
-    const byCourse = {};
-    courses.forEach(c => byCourse[c] = 0);
-    inscrits.forEach(i => { if (byCourse[i.course] !== undefined) byCourse[i.course]++; });
-
-    const mainStat = `<div class="stat-card"><div class="num">${inscrits.length}</div><div class="lbl">Inscrits total</div></div>`;
-    const courseStats = courses.map(c =>
-      `<div class="stat-card"><div class="num">${byCourse[c] || 0}</div><div class="lbl">${c.split('—')[0].trim()}</div></div>`
-    ).join('');
-    el.innerHTML = mainStat + courseStats;
+    var el = document.getElementById('statsRow');
+    var byCourse = {};
+    courses.forEach(function(c) { byCourse[c] = 0; });
+    inscrits.forEach(function(i) { if (byCourse[i.course] !== undefined) byCourse[i.course]++; });
+    var html = '<div class="stat-card"><div class="num">' + inscrits.length + '</div><div class="lbl">Inscrits total</div></div>';
+    courses.forEach(function(c) {
+      html += '<div class="stat-card"><div class="num">' + (byCourse[c] || 0) + '</div><div class="lbl">' + c.split('—')[0].trim() + '</div></div>';
+    });
+    el.innerHTML = html;
   }
 
   // ── COURSES ─────────────────────────────────────────────────────────────
   function renderCourses() {
-    const el = document.getElementById('coursesList');
-    el.innerHTML = courses.map((c, i) => `
-      <div class="course-item" data-index="${i}">
-        <input type="text" value="${esc(c)}" onchange="courses[${i}]=this.value" />
-        <button class="btn btn-danger btn-sm" onclick="deleteCourse(${i})">🗑</button>
-      </div>
-    `).join('');
+    var el = document.getElementById('coursesList');
+    el.innerHTML = courses.map(function(c, i) {
+      return '<div class="course-item"><input type="text" value="' + esc(c) + '" onchange="courses[' + i + ']=this.value" />' +
+             '<button class="btn btn-danger btn-sm" onclick="deleteCourse(' + i + ')">🗑</button></div>';
+    }).join('');
     updateEditSelect();
   }
 
   function addCourse() {
-    const inp = document.getElementById('newCourseInput');
-    const val = inp.value.trim();
+    var inp = document.getElementById('newCourseInput');
+    var val = inp.value.trim();
     if (!val) return;
     courses.push(val);
     inp.value = '';
@@ -371,83 +283,81 @@ async function ghPut(file, data, msg) {
   }
 
   async function deleteCourse(i) {
-    if (!confirm(`Supprimer "${courses[i]}" ?`)) return;
+    if (!confirm('Supprimer "' + courses[i] + '" ?')) return;
     courses.splice(i, 1);
     renderCourses();
     try {
-      await ghPut(COURSES_FILE, courses, 'Suppression d\'une course');
-      showToast('🗑️ Course supprimée et sauvegardée');
+      await ghPut(COURSES_FILE, courses, 'Suppression course');
+      showToast('🗑️ Course supprimée');
     } catch(err) {
-      console.error('Erreur deleteCourse:', err.message);
-      showToast('❌ Erreur sauvegarde : ' + err.message, true);
+      showToast('❌ Erreur : ' + err.message, true);
     }
   }
 
   async function saveCourses() {
     try {
-      await ghPut(COURSES_FILE, courses, 'Mise à jour des courses');
+      await ghPut(COURSES_FILE, courses, 'Mise a jour des courses');
       showToast('✅ Courses sauvegardées !');
     } catch(err) {
-      console.error('Erreur saveCourses:', err.message);
       showToast('❌ Erreur : ' + err.message, true);
     }
   }
 
   // ── TABLE INSCRITS ──────────────────────────────────────────────────────
   function renderTable() {
-    document.getElementById('inscritCount').textContent = `— ${inscrits.length} inscrit${inscrits.length > 1 ? 's' : ''}`;
-    const tbody = document.getElementById('inscritBody');
+    document.getElementById('inscritCount').textContent = '— ' + inscrits.length + ' inscrit' + (inscrits.length > 1 ? 's' : '');
+    var tbody = document.getElementById('inscritBody');
     if (!inscrits.length) {
-      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:32px">Aucun inscrit pour le moment</td></tr>`;
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:32px">Aucun inscrit pour le moment</td></tr>';
       return;
     }
-    tbody.innerHTML = inscrits.map((m, i) => `
-      <tr>
-        <td style="white-space:nowrap">${m.date || '—'}</td>
-        <td style="white-space:nowrap"><strong>${esc(m.prenom)} ${esc(m.nom)}</strong></td>
-        <td style="font-size:13px">${esc(m.course)}</td>
-        <td><a href="mailto:${esc(m.email)}" style="color:var(--cyan)">${esc(m.email)}</a></td>
-        <td>${esc(m.telephone) || '—'}</td>
-        <td class="td-comment">${esc(m.commentaire) || '—'}</td>
-        <td style="white-space:nowrap">
-          <button class="btn btn-ghost btn-sm" onclick="openEdit(${i})" style="margin-right:4px">✏️</button>
-          <button class="btn btn-danger btn-sm" onclick="deleteInscrit(${i})">🗑</button>
-        </td>
-      </tr>
-    `).join('');
+    tbody.innerHTML = inscrits.map(function(m, i) {
+      return '<tr>' +
+        '<td style="white-space:nowrap">' + (m.date || '—') + '</td>' +
+        '<td style="white-space:nowrap"><strong>' + esc(m.prenom) + ' ' + esc(m.nom) + '</strong></td>' +
+        '<td style="font-size:13px">' + esc(m.course) + '</td>' +
+        '<td><a href="mailto:' + esc(m.email) + '" style="color:var(--cyan)">' + esc(m.email) + '</a></td>' +
+        '<td>' + (esc(m.telephone) || '—') + '</td>' +
+        '<td class="td-comment">' + (esc(m.commentaire) || '—') + '</td>' +
+        '<td style="white-space:nowrap">' +
+          '<button class="btn btn-ghost btn-sm" onclick="openEdit(' + i + ')" style="margin-right:4px">✏️</button>' +
+          '<button class="btn btn-danger btn-sm" onclick="deleteInscrit(' + i + ')">🗑</button>' +
+        '</td>' +
+      '</tr>';
+    }).join('');
   }
 
   // ── SUPPRIMER ───────────────────────────────────────────────────────────
   async function deleteInscrit(i) {
-    const m = inscrits[i];
-    if (!confirm(`Supprimer l'inscription de ${m.prenom} ${m.nom} ?`)) return;
+    var m = inscrits[i];
+    if (!confirm('Supprimer l\'inscription de ' + m.prenom + ' ' + m.nom + ' ?')) return;
     inscrits.splice(i, 1);
     try {
-      await ghPut(DATA_FILE, inscrits, `Suppression : ${m.prenom} ${m.nom}`);
+      await ghPut(DATA_FILE, inscrits, 'Suppression : ' + m.prenom + ' ' + m.nom);
       showToast('🗑️ Inscription supprimée');
     } catch(err) {
-      console.error('Erreur delete:', err.message);
-      showToast('❌ Erreur : ' + err.message, true);
-      // Remettre l'inscrit en cas d'échec
       inscrits.splice(i, 0, m);
+      showToast('❌ Erreur : ' + err.message, true);
     }
     renderStats(); renderTable();
   }
 
   // ── ÉDITER ──────────────────────────────────────────────────────────────
   function updateEditSelect() {
-    const sel = document.getElementById('editCourse');
-    sel.innerHTML = courses.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
+    var sel = document.getElementById('editCourse');
+    sel.innerHTML = courses.map(function(c) {
+      return '<option value="' + esc(c) + '">' + esc(c) + '</option>';
+    }).join('');
   }
 
   function openEdit(i) {
-    const m = inscrits[i];
-    document.getElementById('editId').value = i;
-    document.getElementById('editCourse').value = m.course;
-    document.getElementById('editNom').value = m.nom;
-    document.getElementById('editPrenom').value = m.prenom;
-    document.getElementById('editEmail').value = m.email;
-    document.getElementById('editTelephone').value = m.telephone || '';
+    var m = inscrits[i];
+    document.getElementById('editId').value          = i;
+    document.getElementById('editCourse').value      = m.course;
+    document.getElementById('editNom').value         = m.nom;
+    document.getElementById('editPrenom').value      = m.prenom;
+    document.getElementById('editEmail').value       = m.email;
+    document.getElementById('editTelephone').value   = m.telephone || '';
     document.getElementById('editCommentaire').value = m.commentaire || '';
     document.getElementById('editModal').classList.add('open');
   }
@@ -455,26 +365,24 @@ async function ghPut(file, data, msg) {
   function closeModal() { document.getElementById('editModal').classList.remove('open'); }
 
   async function saveEdit() {
-    const i = parseInt(document.getElementById('editId').value);
-    const backup = { ...inscrits[i] };
-    inscrits[i] = {
-      ...inscrits[i],
-      course: document.getElementById('editCourse').value,
-      nom: document.getElementById('editNom').value.trim(),
-      prenom: document.getElementById('editPrenom').value.trim(),
-      email: document.getElementById('editEmail').value.trim().toLowerCase(),
-      telephone: document.getElementById('editTelephone').value.trim(),
+    var i      = parseInt(document.getElementById('editId').value);
+    var backup = Object.assign({}, inscrits[i]);
+    inscrits[i] = Object.assign({}, inscrits[i], {
+      course:      document.getElementById('editCourse').value,
+      nom:         document.getElementById('editNom').value.trim(),
+      prenom:      document.getElementById('editPrenom').value.trim(),
+      email:       document.getElementById('editEmail').value.trim().toLowerCase(),
+      telephone:   document.getElementById('editTelephone').value.trim(),
       commentaire: document.getElementById('editCommentaire').value.trim()
-    };
+    });
     try {
-      const m = inscrits[i];
-      await ghPut(DATA_FILE, inscrits, `Modification : ${m.prenom} ${m.nom}`);
-      showToast('✅ Inscription mise à jour');
+      var m = inscrits[i];
+      await ghPut(DATA_FILE, inscrits, 'Modification : ' + m.prenom + ' ' + m.nom);
+      showToast('✅ Inscription mise a jour');
       closeModal();
     } catch(err) {
-      console.error('Erreur saveEdit:', err.message);
+      inscrits[i] = backup;
       showToast('❌ Erreur : ' + err.message, true);
-      inscrits[i] = backup; // Annuler la modification en cas d'échec
     }
     renderStats(); renderTable();
   }
