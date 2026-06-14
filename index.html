@@ -329,7 +329,7 @@
     var githubUrl = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/contents/' + file;
     var r = await fetch(WORKER_URL + '?url=' + encodeURIComponent(githubUrl), {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'X-Public-Write': 'true' },
       body: JSON.stringify({ message: msg, content: content, sha: freshSha })
     });
     if (!r.ok) {
